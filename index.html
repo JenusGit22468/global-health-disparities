@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Health Disparities Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo"><i class="fas fa-globe"></i> Global Health Disparities</h1>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="treatment-gaps.html">Treatment Gaps</a></li>
+                <li><a href="world-map.html">World Map</a></li>
+                <li><a href="data-sources.html">Data Sources</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Global Health Disparities Platform</h1>
+            <p>Visualizing healthcare inequalities across low- and middle-income countries</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3 id="countries-count">194</h3>
+                    <p>Countries Analyzed</p>
+                </div>
+                <div class="stat">
+                    <h3 id="treatment-gap">76%</h3>
+                    <p>Avg Treatment Gap</p>
+                </div>
+                <div class="stat">
+                    <h3 id="affected-population">2.1B</h3>
+                    <p>People Affected</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="data-overview">
+            <h2>Latest Health Disparity Data</h2>
+            <div id="loading">Loading real data...</div>
+            <div id="data-container" style="display: none;">
+                <!-- Real data will load here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
