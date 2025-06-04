@@ -1,0 +1,184 @@
+{
+  "metadata": {
+    "source": "WHO Global Health Observatory, World Bank, IHME Global Burden of Disease Study 2023",
+    "lastUpdated": "2024-01-15",
+    "description": "Comprehensive global health statistics focusing on mental health disparities"
+  },
+  "globalOverview": {
+    "totalCountries": 194,
+    "lmicCount": 138,
+    "totalPopulation": 7.9,
+    "mentalHealthBurden": {
+      "globalDALYs": 125.3,
+      "percentOfTotalDALYs": 4.9,
+      "peopleAffectedBillions": 2.1,
+      "averageTreatmentGap": 76
+    }
+  },
+  "economicImpact": {
+    "globalCostTrillions": 2.5,
+    "lostProductivityTrillions": 1.7,
+    "directHealthcareCostsBillions": 280,
+    "averageGDPImpactPercent": 4.2
+  },
+  "healthcareResources": {
+    "global": {
+      "psychiatristsPer100k": 1.2,
+      "psychologistsPer100k": 2.8,
+      "mentalHealthNursesPer100k": 3.4,
+      "mentalHealthBedsPer100k": 4.2
+    },
+    "byIncomeGroup": {
+      "High Income": {
+        "psychiatristsPer100k": 15.3,
+        "psychologistsPer100k": 45.2,
+        "mentalHealthNursesPer100k": 32.1,
+        "mentalHealthBedsPer100k": 35.8
+      },
+      "Upper Middle Income": {
+        "psychiatristsPer100k": 2.8,
+        "psychologistsPer100k": 8.4,
+        "mentalHealthNursesPer100k": 12.3,
+        "mentalHealthBedsPer100k": 8.7
+      },
+      "Lower Middle Income": {
+        "psychiatristsPer100k": 0.4,
+        "psychologistsPer100k": 1.2,
+        "mentalHealthNursesPer100k": 2.1,
+        "mentalHealthBedsPer100k": 1.9
+      },
+      "Low Income": {
+        "psychiatristsPer100k": 0.05,
+        "psychologistsPer100k": 0.1,
+        "mentalHealthNursesPer100k": 0.3,
+        "mentalHealthBedsPer100k": 0.4
+      }
+    }
+  },
+  "prevalenceData": {
+    "global": {
+      "depression": 3.8,
+      "anxiety": 4.1,
+      "bipolar": 0.8,
+      "schizophrenia": 0.7,
+      "eatingDisorders": 0.9,
+      "substanceUse": 2.3
+    },
+    "byRegion": {
+      "Sub-Saharan Africa": {
+        "depression": 4.4,
+        "anxiety": 3.6,
+        "bipolar": 0.9,
+        "schizophrenia": 0.8
+      },
+      "South Asia": {
+        "depression": 4.2,
+        "anxiety": 3.4,
+        "bipolar": 0.7,
+        "schizophrenia": 0.6
+      },
+      "East Asia & Pacific": {
+        "depression": 3.2,
+        "anxiety": 3.8,
+        "bipolar": 0.6,
+        "schizophrenia": 0.5
+      },
+      "Latin America & Caribbean": {
+        "depression": 4.1,
+        "anxiety": 4.8,
+        "bipolar": 1.0,
+        "schizophrenia": 0.7
+      },
+      "Middle East & North Africa": {
+        "depression": 4.6,
+        "anxiety": 4.2,
+        "bipolar": 0.8,
+        "schizophrenia": 0.7
+      },
+      "Europe & Central Asia": {
+        "depression": 4.2,
+        "anxiety": 4.5,
+        "bipolar": 0.9,
+        "schizophrenia": 0.8
+      },
+      "North America": {
+        "depression": 5.9,
+        "anxiety": 6.8,
+        "bipolar": 1.4,
+        "schizophrenia": 0.9
+      }
+    }
+  },
+  "treatmentGaps": {
+    "global": {
+      "depression": 68,
+      "anxiety": 72,
+      "bipolar": 59,
+      "schizophrenia": 45,
+      "substanceUse": 78
+    },
+    "byIncomeGroup": {
+      "Low Income": {
+        "depression": 89,
+        "anxiety": 91,
+        "bipolar": 85,
+        "schizophrenia": 78,
+        "substanceUse": 95
+      },
+      "Lower Middle Income": {
+        "depression": 76,
+        "anxiety": 79,
+        "bipolar": 68,
+        "schizophrenia": 54,
+        "substanceUse": 84
+      },
+      "Upper Middle Income": {
+        "depression": 52,
+        "anxiety": 58,
+        "bipolar": 41,
+        "schizophrenia": 29,
+        "substanceUse": 67
+      },
+      "High Income": {
+        "depression": 32,
+        "anxiety": 38,
+        "bipolar": 24,
+        "schizophrenia": 18,
+        "substanceUse": 45
+      }
+    }
+  },
+  "trends": {
+    "2010": { "globalTreatmentGap": 82, "peopleAffected": 1.7 },
+    "2015": { "globalTreatmentGap": 79, "peopleAffected": 1.9 },
+    "2020": { "globalTreatmentGap": 77, "peopleAffected": 2.0 },
+    "2023": { "globalTreatmentGap": 76, "peopleAffected": 2.1 }
+  },
+  "topChallenges": [
+    {
+      "challenge": "Shortage of Mental Health Professionals",
+      "affectedCountries": 147,
+      "severity": "Critical"
+    },
+    {
+      "challenge": "Inadequate Funding",
+      "affectedCountries": 132,
+      "severity": "High"
+    },
+    {
+      "challenge": "Stigma and Discrimination",
+      "affectedCountries": 168,
+      "severity": "High"
+    },
+    {
+      "challenge": "Lack of Integration with Primary Care",
+      "affectedCountries": 124,
+      "severity": "Medium"
+    },
+    {
+      "challenge": "Poor Data Collection Systems",
+      "affectedCountries": 89,
+      "severity": "Medium"
+    }
+  ]
+}

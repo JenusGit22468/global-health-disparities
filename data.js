@@ -1,27 +1,24 @@
-// Real Data Fetcher for Global Health Disparities Platform
-// Connects to WHO, World Bank, and other health data APIs
+// Static Data Loader for Global Health Disparities Platform
+// Uses local JSON files with real WHO, World Bank, and IHME data
 
-class HealthDataFetcher {
+class StaticHealthDataFetcher {
     constructor() {
-        this.baseURLs = {
-            who: 'https://ghoapi.azureedge.net/api',
-            worldBank: 'https://api.worldbank.org/v2',
-            ourWorldInData: 'https://github.com/owid/owid-datasets/raw/master'
-        };
+        this.baseURL = './datasets/';
         this.cache = new Map();
-        this.cacheDuration = 3600000; // 1 hour in milliseconds
+        this.cacheDuration = 3600000; // 1 hour
     }
 
-    // Generic fetch with caching
-    async fetchWithCache(url, cacheKey) {
+    // Generic fetch with caching for static files
+    async fetchStaticData(filename, cacheKey) {
         const cached = this.cache.get(cacheKey);
         if (cached && Date.now() - cached.timestamp < this.cacheDuration) {
+            console.log(`📦 Using cached data for ${filename}`);
             return cached.data;
         }
 
         try {
-            console.log(`Fetching data from: ${url}`);
-            const response = await fetch(url);
+            console.log(`📊 Loading ${filename}...`);
+            const response = await fetch(this.baseURL + filename);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -32,256 +29,194 @@ class HealthDataFetcher {
                 timestamp: Date.now()
             });
             
+            console.log(`✅ Successfully loaded ${filename}`);
             return data;
         } catch (error) {
-            console.error(`Error fetching data from ${url}:`, error);
-            // Return mock data if API fails
-            return this.getMockData(cacheKey);
+            console.error(`❌ Error loading ${filename}:`, error);
+            throw error;
         }
     }
 
-    // WHO Global Health Observatory Data
-    async getWHOData(indicator, year = '2023') {
-        const url = `${this.baseURLs.who}/${indicator}?$filter=TimeDimension eq '${year}'&$format=json`;
-        return await this.fetchWithCache(url, `who_${indicator}_${year}`);
-    }
-
-    // Mental Health Treatment Gaps (WHO Mental Health Atlas)
+    // Load mental health treatment gaps
     async getMentalHealthTreatmentGaps() {
-        try {
-            // WHO Mental Health Atlas data
-            const data = await this.getWHOData('MH_12'); // Mental health indicator
-            
-            // Process and return treatment gap data
-            return this.processTreatmentGapData(data);
-        } catch (error) {
-            console.error('Error fetching WHO treatment gap data:', error);
-            return this.getMockTreatmentGaps();
-        }
+        return await this.fetchStaticData('mental-health-treatment-gaps.json', 'treatment_gaps');
     }
 
-    // World Bank Health Expenditure Data
-    async getHealthExpenditureData() {
-        const url = `${this.baseURLs.worldBank}/country/all/indicator/SH.XPD.CHEX.GD.ZS?format=json&date=2020:2023&per_page=300`;
-        return await this.fetchWithCache(url, 'wb_health_expenditure');
+    // Load global health statistics
+    async getGlobalHealthStatistics() {
+        return await this.fetchStaticData('global-health-statistics.json', 'global_stats');
     }
 
-    // Mental Health Professional Density (WHO)
-    async getMentalHealthProfessionals() {
-        try {
-            const psychiatrists = await this.getWHOData('MH_1'); // Psychiatrists per 100k
-            const psychologists = await this.getWHOData('MH_2'); // Psychologists per 100k
-            const nurses = await this.getWHOData('MH_3'); // Mental health nurses per 100k
-            
-            return this.processMentalHealthWorkers({
-                psychiatrists,
-                psychologists,
-                nurses
-            });
-        } catch (error) {
-            console.error('Error fetching mental health professional data:', error);
-            return this.getMockMentalHealthWorkers();
-        }
+    // Get top countries with highest treatment gaps
+    async getTopTreatmentGapCountries(limit = 15) {
+        const data = await this.getMentalHealthTreatmentGaps();
+        return data.treatmentGaps
+            .sort((a, b) => b.gap - a.gap)
+            .slice(0, limit);
     }
 
-    // Country Classifications (World Bank)
-    async getCountryClassifications() {
-        const url = `${this.baseURLs.worldBank}/country?format=json&per_page=300`;
-        return await this.fetchWithCache(url, 'wb_country_classifications');
-    }
-
-    // Process treatment gap data
-    processTreatmentGapData(rawData) {
-        const countries = [
-            { country: 'Chad', gap: 95, region: 'Sub-Saharan Africa', population: 16.4, income: 'LIC' },
-            { country: 'Central African Republic', gap: 92, region: 'Sub-Saharan Africa', population: 4.8, income: 'LIC' },
-            { country: 'Afghanistan', gap: 89, region: 'South Asia', population: 38.9, income: 'LIC' },
-            { country: 'Mali', gap: 88, region: 'Sub-Saharan Africa', population: 20.3, income: 'LIC' },
-            { country: 'Somalia', gap: 87, region: 'Sub-Saharan Africa', population: 15.9, income: 'LIC' },
-            { country: 'Bangladesh', gap: 85, region: 'South Asia', population: 164.7, income: 'LMIC' },
-            { country: 'Nigeria', gap: 83, region: 'Sub-Saharan Africa', population: 206.1, income: 'LMIC' },
-            { country: 'Pakistan', gap: 81, region: 'South Asia', population: 220.9, income: 'LMIC' },
-            { country: 'Ethiopia', gap: 79, region: 'Sub-Saharan Africa', population: 114.9, income: 'LIC' },
-            { country: 'Democratic Republic of Congo', gap: 77, region: 'Sub-Saharan Africa', population: 89.6, income: 'LIC' },
-            { country: 'Madagascar', gap: 75, region: 'Sub-Saharan Africa', population: 27.7, income: 'LIC' },
-            { country: 'Myanmar', gap: 73, region: 'Southeast Asia', population: 54.4, income: 'LMIC' },
-            { country: 'Yemen', gap: 71, region: 'Middle East', population: 29.8, income: 'LIC' },
-            { country: 'Sudan', gap: 69, region: 'Sub-Saharan Africa', population: 43.8, income: 'LIC' },
-            { country: 'Cambodia', gap: 67, region: 'Southeast Asia', population: 16.7, income: 'LMIC' }
-        ];
-
-        return {
-            data: countries,
-            metadata: {
-                source: 'WHO Mental Health Atlas 2023',
-                lastUpdated: new Date().toISOString(),
-                totalCountries: countries.length,
-                averageGap: countries.reduce((sum, c) => sum + c.gap, 0) / countries.length
-            }
-        };
-    }
-
-    // Process mental health worker data
-    processMentalHealthWorkers(data) {
-        return {
-            global: {
-                psychiatrists: 1.2,
-                psychologists: 2.1,
-                nurses: 3.4
-            },
-            byIncomeGroup: {
-                'High Income': { psychiatrists: 15.3, psychologists: 45.2, nurses: 32.1 },
-                'Upper Middle Income': { psychiatrists: 2.8, psychologists: 8.4, nurses: 12.3 },
-                'Lower Middle Income': { psychiatrists: 0.4, psychologists: 1.2, nurses: 2.1 },
-                'Low Income': { psychiatrists: 0.05, psychologists: 0.1, nurses: 0.3 }
-            },
-            metadata: {
-                source: 'WHO Global Health Observatory',
-                unit: 'per 100,000 population',
-                year: 2023
-            }
-        };
-    }
-
-    // Get comprehensive country data
-    async getCountryData(countryCode) {
-        try {
-            const [
-                treatmentGaps,
-                healthExpenditure,
-                mentalHealthWorkers,
-                classification
-            ] = await Promise.all([
-                this.getMentalHealthTreatmentGaps(),
-                this.getHealthExpenditureData(),
-                this.getMentalHealthProfessionals(),
-                this.getCountryClassifications()
-            ]);
-
-            return {
-                treatmentGaps: treatmentGaps.data.find(c => c.country.toLowerCase().includes(countryCode.toLowerCase())),
-                healthExpenditure: this.extractCountryValue(healthExpenditure, countryCode),
-                mentalHealthWorkers: mentalHealthWorkers,
-                classification: this.extractCountryClassification(classification, countryCode)
-            };
-        } catch (error) {
-            console.error(`Error fetching data for country ${countryCode}:`, error);
-            return null;
-        }
-    }
-
-    // Regional Analysis
+    // Get regional analysis
     async getRegionalAnalysis() {
-        const treatmentGaps = await this.getMentalHealthTreatmentGaps();
+        const data = await this.getMentalHealthTreatmentGaps();
+        return data.regionalSummary;
+    }
+
+    // Get global statistics for dashboard
+    async getGlobalStatistics() {
+        const [treatmentData, globalData] = await Promise.all([
+            this.getMentalHealthTreatmentGaps(),
+            this.getGlobalHealthStatistics()
+        ]);
+
+        return {
+            totalCountries: treatmentData.metadata.totalCountries,
+            lmicCount: globalData.globalOverview.lmicCount,
+            averageTreatmentGap: treatmentData.globalStatistics.averageTreatmentGap,
+            criticalGapCountries: treatmentData.globalStatistics.criticalGapCountries,
+            peopleAffected: globalData.globalOverview.mentalHealthBurden.peopleAffectedBillions,
+            economicImpact: globalData.economicImpact.globalCostTrillions,
+            lastUpdated: treatmentData.metadata.lastUpdated
+        };
+    }
+
+    // Get country-specific data
+    async getCountryData(countryCode) {
+        const treatmentData = await this.getMentalHealthTreatmentGaps();
+        return treatmentData.treatmentGaps.find(country => 
+            country.countryCode.toLowerCase() === countryCode.toLowerCase() ||
+            country.country.toLowerCase().includes(countryCode.toLowerCase())
+        );
+    }
+
+    // Get data by income group
+    async getDataByIncomeGroup() {
+        const treatmentData = await this.getMentalHealthTreatmentGaps();
+        const globalData = await this.getGlobalHealthStatistics();
         
-        const regions = {};
-        treatmentGaps.data.forEach(country => {
-            if (!regions[country.region]) {
-                regions[country.region] = {
-                    countries: [],
-                    averageGap: 0,
-                    totalPopulation: 0,
-                    incomeDistribution: { LIC: 0, LMIC: 0, UMIC: 0, HIC: 0 }
+        const grouped = {
+            'LIC': [],
+            'LMIC': [],
+            'UMIC': [],
+            'HIC': []
+        };
+
+        treatmentData.treatmentGaps.forEach(country => {
+            if (grouped[country.incomeGroup]) {
+                grouped[country.incomeGroup].push(country);
+            }
+        });
+
+        // Calculate averages for each group
+        Object.keys(grouped).forEach(group => {
+            const countries = grouped[group];
+            if (countries.length > 0) {
+                grouped[group] = {
+                    countries: countries,
+                    averageGap: countries.reduce((sum, c) => sum + c.gap, 0) / countries.length,
+                    totalPopulation: countries.reduce((sum, c) => sum + c.population, 0),
+                    averageGDP: countries.reduce((sum, c) => sum + c.gdpPerCapita, 0) / countries.length,
+                    countryCount: countries.length
                 };
             }
-            
-            regions[country.region].countries.push(country);
-            regions[country.region].totalPopulation += country.population;
-            regions[country.region].incomeDistribution[country.income]++;
         });
 
-        // Calculate averages
-        Object.keys(regions).forEach(region => {
-            const countries = regions[region].countries;
-            regions[region].averageGap = countries.reduce((sum, c) => sum + c.gap, 0) / countries.length;
-            regions[region].countryCount = countries.length;
-        });
-
-        return regions;
+        return grouped;
     }
 
-    // Global Statistics
-    async getGlobalStatistics() {
-        const treatmentGaps = await this.getMentalHealthTreatmentGaps();
-        const mentalHealthWorkers = await this.getMentalHealthProfessionals();
-        
-        return {
-            totalCountries: 194,
-            lmicCount: 138,
-            averageTreatmentGap: Math.round(treatmentGaps.metadata.averageGap),
-            criticalGapCountries: treatmentGaps.data.filter(c => c.gap >= 80).length,
-            globalPsychiatrists: mentalHealthWorkers.global.psychiatrists,
-            peopleAffected: 2.1, // billions
-            lastUpdated: new Date().toISOString()
-        };
+    // Get prevalence data by disorder
+    async getPrevalenceByDisorder() {
+        const globalData = await this.getGlobalHealthStatistics();
+        return globalData.prevalenceData;
     }
 
-    // Utility functions
-    extractCountryValue(data, countryCode) {
-        if (!data || !data[1]) return null;
-        return data[1].find(item => 
-            item.country && item.country.id && 
-            item.country.id.toLowerCase() === countryCode.toLowerCase()
-        );
+    // Get healthcare resources data
+    async getHealthcareResources() {
+        const globalData = await this.getGlobalHealthStatistics();
+        return globalData.healthcareResources;
     }
 
-    extractCountryClassification(data, countryCode) {
-        if (!data || !data[1]) return null;
-        return data[1].find(item => 
-            item.id && item.id.toLowerCase() === countryCode.toLowerCase()
-        );
+    // Get economic impact data
+    async getEconomicImpact() {
+        const globalData = await this.getGlobalHealthStatistics();
+        return globalData.economicImpact;
     }
 
-    // Mock data fallbacks
-    getMockTreatmentGaps() {
-        return this.processTreatmentGapData(null);
+    // Get trend data over time
+    async getTrends() {
+        const globalData = await this.getGlobalHealthStatistics();
+        return globalData.trends;
     }
 
-    getMockMentalHealthWorkers() {
-        return this.processMentalHealthWorkers(null);
-    }
-
-    getMockData(cacheKey) {
-        console.log(`Returning mock data for ${cacheKey}`);
-        if (cacheKey.includes('treatment')) {
-            return this.getMockTreatmentGaps();
-        } else if (cacheKey.includes('workers')) {
-            return this.getMockMentalHealthWorkers();
-        }
-        return { data: [], message: 'Mock data' };
+    // Get top challenges
+    async getTopChallenges() {
+        const globalData = await this.getGlobalHealthStatistics();
+        return globalData.topChallenges;
     }
 }
 
-// Export for use in other files
-const healthDataFetcher = new HealthDataFetcher();
+// Create global instance
+const healthDataFetcher = new StaticHealthDataFetcher();
 
 // Helper functions for easy use
 async function loadTreatmentGaps() {
-    return await healthDataFetcher.getMentalHealthTreatmentGaps();
+    try {
+        return await healthDataFetcher.getMentalHealthTreatmentGaps();
+    } catch (error) {
+        console.error('Error loading treatment gaps:', error);
+        return null;
+    }
 }
 
 async function loadGlobalStats() {
-    return await healthDataFetcher.getGlobalStatistics();
+    try {
+        return await healthDataFetcher.getGlobalStatistics();
+    } catch (error) {
+        console.error('Error loading global stats:', error);
+        return null;
+    }
 }
 
 async function loadRegionalData() {
-    return await healthDataFetcher.getRegionalAnalysis();
+    try {
+        return await healthDataFetcher.getRegionalAnalysis();
+    } catch (error) {
+        console.error('Error loading regional data:', error);
+        return null;
+    }
 }
 
 async function loadCountryData(countryCode) {
-    return await healthDataFetcher.getCountryData(countryCode);
+    try {
+        return await healthDataFetcher.getCountryData(countryCode);
+    } catch (error) {
+        console.error('Error loading country data:', error);
+        return null;
+    }
+}
+
+async function loadTopTreatmentGapCountries(limit = 15) {
+    try {
+        return await healthDataFetcher.getTopTreatmentGapCountries(limit);
+    } catch (error) {
+        console.error('Error loading top countries:', error);
+        return null;
+    }
 }
 
 // Real-time data update function
 async function updateDashboardData() {
     try {
-        console.log('🔄 Updating dashboard with real data...');
+        console.log('🔄 Loading static health data files...');
         
         const [globalStats, treatmentGaps, regionalData] = await Promise.all([
             loadGlobalStats(),
             loadTreatmentGaps(),
             loadRegionalData()
         ]);
+
+        if (!globalStats || !treatmentGaps) {
+            throw new Error('Failed to load required data files');
+        }
 
         // Update homepage statistics
         if (document.getElementById('countries-count')) {
@@ -294,19 +229,19 @@ async function updateDashboardData() {
             document.getElementById('affected-population').textContent = globalStats.peopleAffected + 'B';
         }
 
-        console.log('✅ Dashboard updated with real data');
+        console.log('✅ Dashboard updated with static health data');
+        console.log('📊 Data sources: WHO Mental Health Atlas, World Bank, IHME GBD');
+        
         return { globalStats, treatmentGaps, regionalData };
         
     } catch (error) {
         console.error('❌ Error updating dashboard data:', error);
+        console.log('⚠️ Please ensure datasets folder exists with JSON files');
         return null;
     }
 }
 
-// Auto-refresh data every 30 minutes
-setInterval(updateDashboardData, 30 * 60 * 1000);
-
-// Initialize data on page load
+// Initialize data loading when page loads
 if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', updateDashboardData);
 }
