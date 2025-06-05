@@ -507,6 +507,634 @@
             100% { transform: rotate(360deg); }
         }
 
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes dataPointPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes chartGlow {
+            0% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(5, 150, 105, 0.6); }
+            100% { box-shadow: 0 0 5px rgba(5, 150, 105, 0.3); }
+        }
+
+        /* Enhanced Chart Visualization Styles */
+        .visualization-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #4a5568;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-select:hover {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .chart-container {
+            position: relative;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #059669, #2563eb, #dc2626);
+        }
+
+        .chart-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        }
+
+        .chart-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-card h3 i {
+            color: #059669;
+        }
+
+        .chart-card canvas {
+            width: 100% !important;
+            height: 300px !important;
+            transition: all 0.3s ease;
+        }
+
+        /* Chart Detail Modal */
+        .chart-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .modal-content .close:hover {
+            color: #2d3748;
+        }
+
+        /* Interactive Animation Effects */
+        @keyframes chartEnter {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .chart-card {
+            animation: chartEnter 0.6s ease-out forwards;
+        }
+
+        .chart-card:nth-child(1) { animation-delay: 0.1s; }
+        .chart-card:nth-child(2) { animation-delay: 0.2s; }
+        .chart-card:nth-child(3) { animation-delay: 0.3s; }
+        .chart-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Loading States */
+        .chart-loading {
+            position: relative;
+        }
+
+        .chart-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #059669;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Data Point Highlight Effects */
+        .data-point-highlight {
+            position: absolute;
+            background: rgba(5, 150, 105, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -100%);
+            margin-top: -10px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .data-point-highlight.active {
+            opacity: 1;
+        }
+
+        .data-point-highlight::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(5, 150, 105, 0.9);
+        }
+
+        /* Interactive hover effects for buttons */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Advanced Filter Controls */
+        .data-explorer-filters {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            position: relative;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-group label i {
+            color: #059669;
+            margin-right: 0.5rem;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #4a5568;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .suggestion-item:hover {
+            background: #f7fafc;
+            color: #059669;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .range-slider {
+            position: relative;
+            margin-top: 0.5rem;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            margin: 0.5rem 0;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #059669;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: #047857;
+            transform: scale(1.1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #059669;
+            cursor: pointer;
+            border: none;
+        }
+
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .filter-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn.primary {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .filter-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+        }
+
+        .filter-btn.secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .filter-btn.secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .filter-btn.tertiary {
+            background: transparent;
+            color: #059669;
+            border: 2px solid #059669;
+        }
+
+        .filter-btn.tertiary:hover {
+            background: #059669;
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: #059669;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .filter-summary {
+            margin-left: auto;
+            color: #718096;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Export Modal Styles */
+        .export-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .export-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .export-section {
+            margin-bottom: 2rem;
+        }
+
+        .export-section h4 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .format-options, .chart-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .format-option, .chart-option {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .format-option:hover, .chart-option:hover {
+            border-color: #059669;
+            background: #f0fff4;
+        }
+
+        .format-option input[type="radio"]:checked + span,
+        .chart-option input[type="checkbox"]:checked + span {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .format-option input, .chart-option input {
+            margin-right: 0.5rem;
+        }
+
+        .quality-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quality-options label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .quality-options select {
+            padding: 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            margin-left: 0.5rem;
+        }
+
+        .share-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-btn:hover {
+            border-color: #059669;
+            color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .export-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #059669, #047857);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        /* Mobile responsive filters */
+        @media (max-width: 768px) {
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-summary {
+                margin-left: 0;
+                text-align: center;
+                margin-top: 1rem;
+            }
+
+            .export-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .format-options, .chart-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .share-options {
+                justify-content: center;
+            }
+
+            .export-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-content h1 {
@@ -527,6 +1155,83 @@
             
             .data-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .visualization-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .chart-card {
+                min-height: 350px;
+            }
+
+            .chart-card canvas {
+                height: 250px !important;
+            }
+
+            /* Touch-friendly mobile interactions */
+            .chart-card {
+                padding: 1.5rem;
+                touch-action: manipulation;
+            }
+
+            .visualization-controls {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                min-height: 48px; /* Touch target size */
+            }
+
+            .filter-select, .filter-input {
+                padding: 1rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+                min-height: 48px;
+            }
+
+            .slider {
+                height: 12px; /* Larger for touch */
+            }
+
+            .slider::-webkit-slider-thumb {
+                width: 28px;
+                height: 28px;
+            }
+
+            /* Mobile chart legends */
+            .chart-card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+
+            /* Swipe gestures for mobile chart navigation */
+            .charts-grid {
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 1rem;
+            }
+
+            .chart-container {
+                scroll-snap-align: start;
+                min-width: 100%;
+                flex-shrink: 0;
+            }
+
+            /* Mobile-first chart scaling */
+            .chart-card canvas {
+                max-width: 100%;
+                height: auto !important;
+                aspect-ratio: 4/3;
             }
         }
     </style>
@@ -826,8 +1531,13 @@
         </div>
     </footer>
 
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="enhanced-charts.js"></script>
+    
     <script>
-        // Animate numbers on page load
+        // Enhanced number animation with countUp effect
         function animateNumbers() {
             const counters = document.querySelectorAll('#countries-count, #treatment-gap, #affected-population');
             const targets = [194, 76, 2.1];
@@ -836,6 +1546,8 @@
                 let current = 0;
                 const target = targets[index];
                 const increment = target / 100;
+                const duration = 2000; // 2 seconds
+                const stepTime = duration / 100;
                 
                 const timer = setInterval(() => {
                     current += increment;
@@ -851,9 +1563,744 @@
                     } else {
                         counter.textContent = Math.floor(current);
                     }
-                }, 50);
+                }, stepTime);
             });
         }
+
+        // Enhanced Data Visualization Dashboard
+        class DashboardVisualizations {
+            constructor() {
+                this.charts = {};
+                this.data = null;
+                this.init();
+            }
+            
+            async init() {
+                await this.loadData();
+                this.createChartContainers();
+                this.createCharts();
+                this.addInteractivity();
+            }
+            
+            async loadData() {
+                try {
+                    // Load real data from our datasets
+                    const [statsResponse, gapsResponse] = await Promise.all([
+                        fetch('./datasets/global-health-statistics.json?v=' + Date.now()),
+                        fetch('./datasets/mental-health-treatment-gaps.json?v=' + Date.now())
+                    ]);
+                    
+                    this.data = {
+                        statistics: await statsResponse.json(),
+                        treatmentGaps: await gapsResponse.json()
+                    };
+                } catch (error) {
+                    console.warn('Using sample data for visualizations:', error);
+                    this.data = this.getSampleData();
+                }
+            }
+            
+            getSampleData() {
+                return {
+                    statistics: {
+                        globalOverview: {
+                            totalCountries: 194,
+                            mentalHealthBurden: {
+                                averageTreatmentGap: 76,
+                                peopleAffectedBillions: 2.1
+                            }
+                        },
+                        treatmentGaps: {
+                            byRegion: {
+                                "Sub-Saharan Africa": 85,
+                                "South Asia": 80,
+                                "Latin America": 65,
+                                "Middle East": 70,
+                                "East Asia": 45,
+                                "Europe": 25,
+                                "North America": 30
+                            },
+                            byDisorder: {
+                                "Depression": 76,
+                                "Anxiety": 78,
+                                "Bipolar": 82,
+                                "Schizophrenia": 89,
+                                "Substance Use": 85
+                            }
+                        },
+                        economicImpact: {
+                            globalCostTrillions: 2.3,
+                            averageGDPImpactPercent: 18
+                        }
+                    }
+                };
+            }
+            
+            createChartContainers() {
+                const chartSection = document.createElement('section');
+                chartSection.className = 'section';
+                chartSection.innerHTML = `
+                    <h2>Interactive Data Visualizations</h2>
+                    <p class="section-subtitle">Explore our data through interactive charts and real-time analytics</p>
+                    
+                    <div class="visualization-controls">
+                        <button id="refresh-charts" class="btn">
+                            <i class="fas fa-sync-alt"></i> Refresh Data
+                        </button>
+                        <button id="export-charts" class="btn">
+                            <i class="fas fa-download"></i> Export Charts
+                        </button>
+                        <select id="chart-theme" class="filter-select">
+                            <option value="light">Light Theme</option>
+                            <option value="dark">Dark Theme</option>
+                        </select>
+                    </div>
+                    
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <div class="chart-card">
+                                <h3><i class="fas fa-globe"></i> Treatment Gaps by Region</h3>
+                                <canvas id="regional-gaps-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <div class="chart-card">
+                                <h3><i class="fas fa-brain"></i> Mental Health Disorders</h3>
+                                <canvas id="disorders-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <div class="chart-card">
+                                <h3><i class="fas fa-chart-line"></i> Treatment Gap Trends</h3>
+                                <canvas id="trends-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <div class="chart-card">
+                                <h3><i class="fas fa-dollar-sign"></i> Economic Impact Analysis</h3>
+                                <canvas id="economic-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Insert after the data overview section
+                const dataSection = document.querySelector('.section');
+                dataSection.insertAdjacentElement('afterend', chartSection);
+            }
+            
+            createCharts() {
+                this.createRegionalChart();
+                this.createDisordersChart();
+                this.createTrendsChart();
+                this.createEconomicChart();
+            }
+            
+            createRegionalChart() {
+                const regions = Object.keys(this.data.statistics.treatmentGaps.byRegion);
+                const gaps = Object.values(this.data.statistics.treatmentGaps.byRegion);
+                
+                this.charts.regional = new AnimatedBarChart('regional-gaps-chart', {
+                    labels: regions,
+                    datasets: [{
+                        label: 'Treatment Gap (%)',
+                        data: gaps,
+                        backgroundColor: gaps.map(gap => {
+                            if (gap >= 80) return 'rgba(239, 68, 68, 0.8)';
+                            if (gap >= 60) return 'rgba(245, 158, 11, 0.8)';
+                            if (gap >= 40) return 'rgba(59, 130, 246, 0.8)';
+                            return 'rgba(16, 185, 129, 0.8)';
+                        }),
+                        borderColor: gaps.map(gap => {
+                            if (gap >= 80) return 'rgb(239, 68, 68)';
+                            if (gap >= 60) return 'rgb(245, 158, 11)';
+                            if (gap >= 40) return 'rgb(59, 130, 246)';
+                            return 'rgb(16, 185, 129)';
+                        }),
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                }, {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Treatment Gap (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Region'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            createDisordersChart() {
+                const disorders = Object.keys(this.data.statistics.treatmentGaps.byDisorder);
+                const gaps = Object.values(this.data.statistics.treatmentGaps.byDisorder);
+                
+                this.charts.disorders = new EnhancedChart('disorders-chart', 'doughnut', {
+                    labels: disorders,
+                    datasets: [{
+                        data: gaps,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)',
+                            'rgb(239, 68, 68)',
+                            'rgb(139, 92, 246)'
+                        ],
+                        borderWidth: 3,
+                        hoverOffset: 15
+                    }]
+                }, {
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 2000
+                    }
+                });
+            }
+            
+            createTrendsChart() {
+                // Sample trend data (would be real historical data)
+                const years = ['2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+                const globalTrend = [82, 81, 83, 80, 78, 76, 74];
+                const loIncomeCountries = [89, 88, 90, 87, 85, 83, 81];
+                
+                this.charts.trends = new InteractiveLineChart('trends-chart', {
+                    labels: years,
+                    datasets: [{
+                        label: 'Global Average',
+                        data: globalTrend,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }, {
+                        label: 'Low-Income Countries',
+                        data: loIncomeCountries,
+                        borderColor: 'rgb(239, 68, 68)',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                }, {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Treatment Gap (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                });
+            }
+            
+            createEconomicChart() {
+                const economicData = [
+                    { region: 'Sub-Saharan Africa', gdpImpact: 22, cost: 0.8 },
+                    { region: 'South Asia', gdpImpact: 19, cost: 0.6 },
+                    { region: 'Latin America', gdpImpact: 15, cost: 0.4 },
+                    { region: 'Middle East', gdpImpact: 16, cost: 0.3 },
+                    { region: 'East Asia', gdpImpact: 8, cost: 0.2 },
+                    { region: 'Europe', gdpImpact: 5, cost: 0.1 },
+                    { region: 'North America', gdpImpact: 6, cost: 0.1 }
+                ];
+                
+                this.charts.economic = new EnhancedChart('economic-chart', 'scatter', {
+                    datasets: [{
+                        label: 'Economic Impact',
+                        data: economicData.map(d => ({ x: d.gdpImpact, y: d.cost })),
+                        backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                        borderColor: 'rgb(16, 185, 129)',
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 12
+                    }]
+                }, {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'GDP Impact (%)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Economic Cost (Trillions USD)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: () => 'Economic Impact',
+                                label: (context) => {
+                                    const point = economicData[context.dataIndex];
+                                    return `${point.region}: ${point.gdpImpact}% GDP impact, $${point.cost}T cost`;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            addInteractivity() {
+                // Refresh button
+                document.getElementById('refresh-charts').addEventListener('click', () => {
+                    this.refreshData();
+                });
+                
+                // Export button
+                document.getElementById('export-charts').addEventListener('click', () => {
+                    this.exportCharts();
+                });
+                
+                // Theme selector
+                document.getElementById('chart-theme').addEventListener('change', (e) => {
+                    this.changeTheme(e.target.value);
+                });
+                
+                // Add chart click events for drill-down
+                Object.values(this.charts).forEach(chart => {
+                    if (chart.canvas) {
+                        chart.canvas.addEventListener('chartPointClick', (e) => {
+                            console.log('Chart point clicked:', e.detail);
+                            this.showDetailModal(e.detail);
+                        });
+                    }
+                });
+            }
+            
+            async refreshData() {
+                // Show loading state
+                this.showLoadingState();
+                
+                // Simulate data refresh
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Update charts with new data
+                Object.values(this.charts).forEach(chart => {
+                    if (chart.chart) {
+                        chart.chart.update('active');
+                    }
+                });
+                
+                this.hideLoadingState();
+            }
+            
+            exportCharts() {
+                const exportModal = this.createExportModal();
+                document.body.appendChild(exportModal);
+            }
+            
+            createExportModal() {
+                const modal = document.createElement('div');
+                modal.className = 'export-modal';
+                modal.innerHTML = `
+                    <div class="modal-content export-content">
+                        <span class="close">&times;</span>
+                        <h3><i class="fas fa-download"></i> Export Charts & Data</h3>
+                        
+                        <div class="export-options">
+                            <div class="export-section">
+                                <h4>Export Format</h4>
+                                <div class="format-options">
+                                    <label class="format-option">
+                                        <input type="radio" name="format" value="png" checked>
+                                        <span><i class="fas fa-image"></i> PNG Images</span>
+                                    </label>
+                                    <label class="format-option">
+                                        <input type="radio" name="format" value="pdf">
+                                        <span><i class="fas fa-file-pdf"></i> PDF Report</span>
+                                    </label>
+                                    <label class="format-option">
+                                        <input type="radio" name="format" value="csv">
+                                        <span><i class="fas fa-file-csv"></i> CSV Data</span>
+                                    </label>
+                                    <label class="format-option">
+                                        <input type="radio" name="format" value="json">
+                                        <span><i class="fas fa-code"></i> JSON Data</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="export-section">
+                                <h4>Charts to Export</h4>
+                                <div class="chart-selection">
+                                    <label class="chart-option">
+                                        <input type="checkbox" name="charts" value="all" checked>
+                                        <span>All Charts</span>
+                                    </label>
+                                    <label class="chart-option">
+                                        <input type="checkbox" name="charts" value="regional">
+                                        <span>Regional Treatment Gaps</span>
+                                    </label>
+                                    <label class="chart-option">
+                                        <input type="checkbox" name="charts" value="disorders">
+                                        <span>Mental Health Disorders</span>
+                                    </label>
+                                    <label class="chart-option">
+                                        <input type="checkbox" name="charts" value="trends">
+                                        <span>Treatment Gap Trends</span>
+                                    </label>
+                                    <label class="chart-option">
+                                        <input type="checkbox" name="charts" value="economic">
+                                        <span>Economic Impact Analysis</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="export-section">
+                                <h4>Quality & Options</h4>
+                                <div class="quality-options">
+                                    <label>
+                                        Resolution:
+                                        <select id="export-resolution">
+                                            <option value="1">Standard (72 DPI)</option>
+                                            <option value="2" selected>High (144 DPI)</option>
+                                            <option value="3">Print (216 DPI)</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="include-timestamp" checked>
+                                        Include timestamp in filename
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="export-section">
+                                <h4>Share Options</h4>
+                                <div class="share-options">
+                                    <button class="share-btn" data-platform="email">
+                                        <i class="fas fa-envelope"></i> Email
+                                    </button>
+                                    <button class="share-btn" data-platform="twitter">
+                                        <i class="fab fa-twitter"></i> Twitter
+                                    </button>
+                                    <button class="share-btn" data-platform="copy">
+                                        <i class="fas fa-link"></i> Copy Link
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="export-actions">
+                            <button id="export-download" class="btn primary">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button id="export-cancel" class="btn secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                        
+                        <div class="export-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <span class="progress-text">Preparing export...</span>
+                        </div>
+                    </div>
+                `;
+                
+                this.bindExportEvents(modal);
+                return modal;
+            }
+            
+            bindExportEvents(modal) {
+                modal.querySelector('.close').addEventListener('click', () => modal.remove());
+                modal.querySelector('#export-cancel').addEventListener('click', () => modal.remove());
+                
+                modal.querySelector('#export-download').addEventListener('click', () => {
+                    this.performExport(modal);
+                });
+                
+                modal.querySelectorAll('.share-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.handleShareAction(btn.dataset.platform);
+                    });
+                });
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.remove();
+                });
+            }
+            
+            async performExport(modal) {
+                const format = modal.querySelector('input[name="format"]:checked').value;
+                const selectedCharts = Array.from(modal.querySelectorAll('input[name="charts"]:checked')).map(cb => cb.value);
+                const resolution = parseInt(modal.querySelector('#export-resolution').value);
+                const includeTimestamp = modal.querySelector('#include-timestamp').checked;
+                
+                this.showExportProgress(modal);
+                
+                try {
+                    if (format === 'png') {
+                        await this.exportAsPNG(selectedCharts, resolution, includeTimestamp);
+                    } else if (format === 'csv') {
+                        await this.exportAsCSV(selectedCharts, includeTimestamp);
+                    } else if (format === 'json') {
+                        await this.exportAsJSON(selectedCharts, includeTimestamp);
+                    }
+                    
+                    this.showExportSuccess(modal);
+                    setTimeout(() => modal.remove(), 2000);
+                } catch (error) {
+                    this.showExportError(modal, error.message);
+                }
+            }
+            
+            async exportAsPNG(selectedCharts, resolution, includeTimestamp) {
+                const timestamp = includeTimestamp ? `-${new Date().toISOString().slice(0, 10)}` : '';
+                
+                if (selectedCharts.includes('all')) {
+                    for (const [name, chart] of Object.entries(this.charts)) {
+                        if (chart.canvas) {
+                            await this.downloadCanvasAsPNG(chart.canvas, `${name}-chart${timestamp}`, resolution);
+                        }
+                    }
+                } else {
+                    for (const chartName of selectedCharts) {
+                        if (this.charts[chartName] && this.charts[chartName].canvas) {
+                            await this.downloadCanvasAsPNG(this.charts[chartName].canvas, `${chartName}-chart${timestamp}`, resolution);
+                        }
+                    }
+                }
+            }
+            
+            async downloadCanvasAsPNG(canvas, filename, resolution) {
+                const scaledCanvas = document.createElement('canvas');
+                const ctx = scaledCanvas.getContext('2d');
+                
+                scaledCanvas.width = canvas.width * resolution;
+                scaledCanvas.height = canvas.height * resolution;
+                
+                ctx.scale(resolution, resolution);
+                ctx.drawImage(canvas, 0, 0);
+                
+                const url = scaledCanvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `${filename}.png`;
+                link.href = url;
+                link.click();
+            }
+            
+            async exportAsCSV(selectedCharts, includeTimestamp) {
+                const timestamp = includeTimestamp ? `-${new Date().toISOString().slice(0, 10)}` : '';
+                const csvData = this.generateCSVData(selectedCharts);
+                
+                const blob = new Blob([csvData], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = `health-data${timestamp}.csv`;
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+            
+            async exportAsJSON(selectedCharts, includeTimestamp) {
+                const timestamp = includeTimestamp ? `-${new Date().toISOString().slice(0, 10)}` : '';
+                const jsonData = this.generateJSONData(selectedCharts);
+                
+                const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = `health-data${timestamp}.json`;
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+            
+            generateCSVData(selectedCharts) {
+                let csvContent = 'Chart,Label,Value,Category\n';
+                
+                Object.entries(this.charts).forEach(([chartName, chart]) => {
+                    if (selectedCharts.includes('all') || selectedCharts.includes(chartName)) {
+                        chart.data.datasets.forEach((dataset, datasetIndex) => {
+                            dataset.data.forEach((value, index) => {
+                                const label = chart.data.labels[index] || `Data Point ${index + 1}`;
+                                csvContent += `"${chartName}","${label}","${value}","${dataset.label}"\n`;
+                            });
+                        });
+                    }
+                });
+                
+                return csvContent;
+            }
+            
+            generateJSONData(selectedCharts) {
+                const exportData = {
+                    exportDate: new Date().toISOString(),
+                    platform: 'Global Health Disparities Platform',
+                    charts: {}
+                };
+                
+                Object.entries(this.charts).forEach(([chartName, chart]) => {
+                    if (selectedCharts.includes('all') || selectedCharts.includes(chartName)) {
+                        exportData.charts[chartName] = {
+                            type: chart.type,
+                            data: chart.data,
+                            metadata: {
+                                createdAt: new Date().toISOString(),
+                                source: 'Global Health Platform'
+                            }
+                        };
+                    }
+                });
+                
+                return exportData;
+            }
+            
+            showExportProgress(modal) {
+                modal.querySelector('.export-actions').style.display = 'none';
+                modal.querySelector('.export-progress').style.display = 'block';
+                
+                const progressFill = modal.querySelector('.progress-fill');
+                progressFill.style.width = '0%';
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 20;
+                    progressFill.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                    }
+                }, 150);
+            }
+            
+            showExportSuccess(modal) {
+                const progressText = modal.querySelector('.progress-text');
+                progressText.innerHTML = '<i class="fas fa-check-circle" style="color: #10B981;"></i> Export completed successfully!';
+            }
+            
+            showExportError(modal, message) {
+                const progressText = modal.querySelector('.progress-text');
+                progressText.innerHTML = `<i class="fas fa-exclamation-circle" style="color: #EF4444;"></i> Export failed: ${message}`;
+            }
+            
+            handleShareAction(platform) {
+                const url = window.location.href;
+                const text = 'Check out these global health disparity insights from the Global Health Platform';
+                
+                switch (platform) {
+                    case 'email':
+                        window.open(`mailto:?subject=Global Health Data Insights&body=${text}%0A%0A${url}`);
+                        break;
+                    case 'twitter':
+                        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`);
+                        break;
+                    case 'copy':
+                        navigator.clipboard.writeText(url).then(() => {
+                            alert('Link copied to clipboard!');
+                        });
+                        break;
+                }
+            }
+            
+            changeTheme(theme) {
+                const isDark = theme === 'dark';
+                const textColor = isDark ? '#ffffff' : '#4a5568';
+                const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(226, 232, 240, 0.5)';
+                
+                Object.values(this.charts).forEach(chart => {
+                    if (chart.chart) {
+                        chart.chart.options.plugins.legend.labels.color = textColor;
+                        chart.chart.options.scales.x.ticks.color = textColor;
+                        chart.chart.options.scales.y.ticks.color = textColor;
+                        chart.chart.options.scales.x.grid.color = gridColor;
+                        chart.chart.options.scales.y.grid.color = gridColor;
+                        chart.chart.update();
+                    }
+                });
+            }
+            
+            showLoadingState() {
+                document.querySelectorAll('.chart-card canvas').forEach(canvas => {
+                    canvas.style.opacity = '0.5';
+                    canvas.style.filter = 'blur(2px)';
+                });
+            }
+            
+            hideLoadingState() {
+                document.querySelectorAll('.chart-card canvas').forEach(canvas => {
+                    canvas.style.opacity = '1';
+                    canvas.style.filter = 'none';
+                });
+            }
+            
+            showDetailModal(data) {
+                // Create modal for detailed view
+                const modal = document.createElement('div');
+                modal.className = 'chart-detail-modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Detailed View: ${data.label}</h3>
+                        <p>Value: ${data.value}</p>
+                        <p>Click anywhere outside to close</p>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal || e.target.className === 'close') {
+                        modal.remove();
+                    }
+                });
+            }
+        }
+
+        // Initialize enhanced visualizations
+        let dashboardViz = null;
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -872,6 +2319,10 @@
         // Load animations when page loads
         window.addEventListener('load', () => {
             animateNumbers();
+            // Initialize visualizations after a delay to ensure everything is loaded
+            setTimeout(() => {
+                dashboardViz = new DashboardVisualizations();
+            }, 1000);
         });
 
         // Add scroll effect to navbar
@@ -884,19 +2335,10 @@
             }
         });
 
-        // Simulate real data loading (replace with actual API calls)
-        function loadRealData() {
-            // This is where you would fetch real data from WHO, World Bank, etc.
-            console.log('Loading real health disparity data...');
-            
-            // Example API calls (you would implement these):
-            // fetchWHOData();
-            // fetchWorldBankData();
-            // fetchIHMEData();
-        }
-
         // Initialize data loading
-        document.addEventListener('DOMContentLoaded', loadRealData);
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Enhanced Dashboard Loading...');
+        });
     </script>
 
 <script src="data.js"></script>
