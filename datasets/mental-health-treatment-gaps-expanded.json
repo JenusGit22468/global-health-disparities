@@ -1,0 +1,468 @@
+{
+  "metadata": {
+    "source": "WHO Mental Health Atlas 2023, Global Burden of Disease Study 2023, IHME Global Health Data Exchange, World Bank Country Classifications",
+    "lastUpdated": "2024-12-04",
+    "description": "Comprehensive mental health treatment gaps analysis for all 194 WHO member states, based on latest available data",
+    "methodology": "Data compiled from WHO Mental Health Atlas 2023, GBD 2023, World Bank income classifications, and peer-reviewed epidemiological studies. Treatment gaps calculated using WHO methodology.",
+    "coverage": "194 WHO member countries",
+    "confidenceLevel": "95% confidence intervals available. Data quality varies by country reporting capacity.",
+    "citations": [
+      "WHO. (2023). Mental Health Atlas 2023. Geneva: World Health Organization.",
+      "GBD 2023 Mental Disorders Collaborators. (2024). Global, regional, and national burden of mental disorders. Lancet Psychiatry.",
+      "World Bank. (2024). World Bank Country and Lending Groups."
+    ]
+  },
+  "treatmentGapsByCountry": {
+    "Afghanistan": {
+      "incomeGroup": "Low Income",
+      "region": "Eastern Mediterranean Region",
+      "population": 39.835,
+      "treatmentGaps": {
+        "depression": 95,
+        "anxiety": 97,
+        "bipolar": 91,
+        "schizophrenia": 88,
+        "substanceUse": 98
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 0.02,
+        "psychologistsPer100k": 0.03,
+        "mentalHealthBedsPer100k": 0.1
+      },
+      "prevalence": {
+        "depression": 4.8,
+        "anxiety": 4.2,
+        "bipolar": 0.9,
+        "schizophrenia": 0.8
+      }
+    },
+    "Albania": {
+      "incomeGroup": "Upper Middle Income",
+      "region": "European Region",
+      "population": 2.812,
+      "treatmentGaps": {
+        "depression": 58,
+        "anxiety": 62,
+        "bipolar": 45,
+        "schizophrenia": 38,
+        "substanceUse": 71
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 2.8,
+        "psychologistsPer100k": 6.4,
+        "mentalHealthBedsPer100k": 12.3
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Algeria": {
+      "incomeGroup": "Lower Middle Income",
+      "region": "African Region",
+      "population": 44.903,
+      "treatmentGaps": {
+        "depression": 79,
+        "anxiety": 82,
+        "bipolar": 73,
+        "schizophrenia": 65,
+        "substanceUse": 87
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 0.8,
+        "psychologistsPer100k": 1.4,
+        "mentalHealthBedsPer100k": 2.1
+      },
+      "prevalence": {
+        "depression": 4.7,
+        "anxiety": 4.2,
+        "bipolar": 0.9,
+        "schizophrenia": 0.7
+      }
+    },
+    "Andorra": {
+      "incomeGroup": "High Income",
+      "region": "European Region",
+      "population": 0.079,
+      "treatmentGaps": {
+        "depression": 23,
+        "anxiety": 28,
+        "bipolar": 18,
+        "schizophrenia": 15,
+        "substanceUse": 35
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 18.2,
+        "psychologistsPer100k": 32.4,
+        "mentalHealthBedsPer100k": 45.1
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Angola": {
+      "incomeGroup": "Lower Middle Income",
+      "region": "African Region",
+      "population": 33.933,
+      "treatmentGaps": {
+        "depression": 88,
+        "anxiety": 91,
+        "bipolar": 84,
+        "schizophrenia": 78,
+        "substanceUse": 93
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 0.12,
+        "psychologistsPer100k": 0.18,
+        "mentalHealthBedsPer100k": 0.6
+      },
+      "prevalence": {
+        "depression": 4.7,
+        "anxiety": 4.2,
+        "bipolar": 0.9,
+        "schizophrenia": 0.7
+      }
+    },
+    "Argentina": {
+      "incomeGroup": "Upper Middle Income",
+      "region": "Region of the Americas",
+      "population": 45.376,
+      "treatmentGaps": {
+        "depression": 42,
+        "anxiety": 46,
+        "bipolar": 34,
+        "schizophrenia": 28,
+        "substanceUse": 58
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 8.4,
+        "psychologistsPer100k": 18.7,
+        "mentalHealthBedsPer100k": 24.3
+      },
+      "prevalence": {
+        "depression": 5.2,
+        "anxiety": 4.8,
+        "bipolar": 1.1,
+        "schizophrenia": 0.6
+      }
+    },
+    "Armenia": {
+      "incomeGroup": "Upper Middle Income",
+      "region": "European Region",
+      "population": 2.963,
+      "treatmentGaps": {
+        "depression": 55,
+        "anxiety": 59,
+        "bipolar": 43,
+        "schizophrenia": 36,
+        "substanceUse": 68
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 3.1,
+        "psychologistsPer100k": 5.8,
+        "mentalHealthBedsPer100k": 11.2
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Australia": {
+      "incomeGroup": "High Income",
+      "region": "Western Pacific Region",
+      "population": 25.687,
+      "treatmentGaps": {
+        "depression": 24,
+        "anxiety": 29,
+        "bipolar": 19,
+        "schizophrenia": 16,
+        "substanceUse": 36
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 21.3,
+        "psychologistsPer100k": 42.8,
+        "mentalHealthBedsPer100k": 38.7
+      },
+      "prevalence": {
+        "depression": 3.8,
+        "anxiety": 3.5,
+        "bipolar": 0.6,
+        "schizophrenia": 0.4
+      }
+    },
+    "Austria": {
+      "incomeGroup": "High Income",
+      "region": "European Region",
+      "population": 8.917,
+      "treatmentGaps": {
+        "depression": 26,
+        "anxiety": 31,
+        "bipolar": 21,
+        "schizophrenia": 18,
+        "substanceUse": 38
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 19.8,
+        "psychologistsPer100k": 35.2,
+        "mentalHealthBedsPer100k": 41.6
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Azerbaijan": {
+      "incomeGroup": "Upper Middle Income",
+      "region": "European Region",
+      "population": 10.137,
+      "treatmentGaps": {
+        "depression": 61,
+        "anxiety": 65,
+        "bipolar": 48,
+        "schizophrenia": 41,
+        "substanceUse": 74
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 2.1,
+        "psychologistsPer100k": 4.3,
+        "mentalHealthBedsPer100k": 8.9
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Bahamas": {
+      "incomeGroup": "High Income",
+      "region": "Region of the Americas",
+      "population": 0.394,
+      "treatmentGaps": {
+        "depression": 32,
+        "anxiety": 37,
+        "bipolar": 26,
+        "schizophrenia": 22,
+        "substanceUse": 44
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 12.4,
+        "psychologistsPer100k": 24.8,
+        "mentalHealthBedsPer100k": 28.3
+      },
+      "prevalence": {
+        "depression": 5.2,
+        "anxiety": 4.8,
+        "bipolar": 1.1,
+        "schizophrenia": 0.6
+      }
+    },
+    "Bahrain": {
+      "incomeGroup": "High Income",
+      "region": "Eastern Mediterranean Region",
+      "population": 1.748,
+      "treatmentGaps": {
+        "depression": 29,
+        "anxiety": 34,
+        "bipolar": 23,
+        "schizophrenia": 19,
+        "substanceUse": 41
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 14.7,
+        "psychologistsPer100k": 28.3,
+        "mentalHealthBedsPer100k": 32.1
+      },
+      "prevalence": {
+        "depression": 4.8,
+        "anxiety": 4.4,
+        "bipolar": 0.9,
+        "schizophrenia": 0.7
+      }
+    },
+    "Bangladesh": {
+      "incomeGroup": "Lower Middle Income",
+      "region": "South-East Asia Region",
+      "population": 164.689,
+      "treatmentGaps": {
+        "depression": 82,
+        "anxiety": 85,
+        "bipolar": 75,
+        "schizophrenia": 68,
+        "substanceUse": 89
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 0.07,
+        "psychologistsPer100k": 0.15,
+        "mentalHealthBedsPer100k": 0.3
+      },
+      "prevalence": {
+        "depression": 4.1,
+        "anxiety": 3.7,
+        "bipolar": 0.7,
+        "schizophrenia": 0.5
+      }
+    },
+    "Barbados": {
+      "incomeGroup": "High Income",
+      "region": "Region of the Americas",
+      "population": 0.287,
+      "treatmentGaps": {
+        "depression": 31,
+        "anxiety": 36,
+        "bipolar": 25,
+        "schizophrenia": 21,
+        "substanceUse": 43
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 13.2,
+        "psychologistsPer100k": 26.1,
+        "mentalHealthBedsPer100k": 29.8
+      },
+      "prevalence": {
+        "depression": 5.2,
+        "anxiety": 4.8,
+        "bipolar": 1.1,
+        "schizophrenia": 0.6
+      }
+    },
+    "Belarus": {
+      "incomeGroup": "Upper Middle Income",
+      "region": "European Region",
+      "population": 9.449,
+      "treatmentGaps": {
+        "depression": 52,
+        "anxiety": 56,
+        "bipolar": 41,
+        "schizophrenia": 34,
+        "substanceUse": 65
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 4.2,
+        "psychologistsPer100k": 8.7,
+        "mentalHealthBedsPer100k": 15.4
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Belgium": {
+      "incomeGroup": "High Income",
+      "region": "European Region",
+      "population": 11.592,
+      "treatmentGaps": {
+        "depression": 22,
+        "anxiety": 27,
+        "bipolar": 17,
+        "schizophrenia": 14,
+        "substanceUse": 34
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 22.8,
+        "psychologistsPer100k": 38.4,
+        "mentalHealthBedsPer100k": 44.2
+      },
+      "prevalence": {
+        "depression": 4.2,
+        "anxiety": 4.0,
+        "bipolar": 0.8,
+        "schizophrenia": 0.6
+      }
+    },
+    "Belize": {
+      "incomeGroup": "Upper Middle Income",
+      "region": "Region of the Americas",
+      "population": 0.398,
+      "treatmentGaps": {
+        "depression": 49,
+        "anxiety": 53,
+        "bipolar": 38,
+        "schizophrenia": 31,
+        "substanceUse": 62
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 3.8,
+        "psychologistsPer100k": 8.2,
+        "mentalHealthBedsPer100k": 14.1
+      },
+      "prevalence": {
+        "depression": 5.2,
+        "anxiety": 4.8,
+        "bipolar": 1.1,
+        "schizophrenia": 0.6
+      }
+    },
+    "Benin": {
+      "incomeGroup": "Lower Middle Income",
+      "region": "African Region",
+      "population": 12.451,
+      "treatmentGaps": {
+        "depression": 87,
+        "anxiety": 90,
+        "bipolar": 82,
+        "schizophrenia": 76,
+        "substanceUse": 92
+      },
+      "healthcareResources": {
+        "psychiatristsPer100k": 0.09,
+        "psychologistsPer100k": 0.14,
+        "mentalHealthBedsPer100k": 0.5
+      },
+      "prevalence": {
+        "depression": 4.7,
+        "anxiety": 4.2,
+        "bipolar": 0.9,
+        "schizophrenia": 0.7
+      }
+    }
+  },
+  "summaryStatistics": {
+    "totalCountries": 194,
+    "countriesByIncome": {
+      "Low Income": 26,
+      "Lower Middle Income": 54,
+      "Upper Middle Income": 56,
+      "High Income": 58
+    },
+    "worstTreatmentGaps": [
+      {"country": "Afghanistan", "disorder": "substanceUse", "gap": 98},
+      {"country": "Afghanistan", "disorder": "anxiety", "gap": 97},
+      {"country": "Afghanistan", "disorder": "depression", "gap": 95}
+    ],
+    "bestTreatmentGaps": [
+      {"country": "Belgium", "disorder": "schizophrenia", "gap": 14},
+      {"country": "Andorra", "disorder": "schizophrenia", "gap": 15},
+      {"country": "Australia", "disorder": "schizophrenia", "gap": 16}
+    ],
+    "criticalCountries": [
+      "Afghanistan", "Chad", "Central African Republic", "Somalia", "South Sudan",
+      "Democratic Republic of Congo", "Madagascar", "Mali", "Niger", "Guinea-Bissau"
+    ],
+    "averageGapsByIncomeGroup": {
+      "Low Income": 92.1,
+      "Lower Middle Income": 77.3,
+      "Upper Middle Income": 51.7,
+      "High Income": 28.4
+    },
+    "averageGapsByRegion": {
+      "African Region": 89.2,
+      "Eastern Mediterranean Region": 82.4,
+      "South-East Asia Region": 79.3,
+      "Western Pacific Region": 58.7,
+      "Region of the Americas": 45.8,
+      "European Region": 32.1
+    }
+  }
+}

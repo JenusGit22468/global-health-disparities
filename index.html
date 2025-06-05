@@ -92,6 +92,68 @@
             width: 100%;
         }
 
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f7fafc;
+            color: #059669;
+            transform: none;
+        }
+
+        .dropdown-menu a::after {
+            display: none;
+        }
+
+        .dropdown > a .fa-chevron-down {
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover > a .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
@@ -479,10 +541,27 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="treatment-gaps.html"><i class="fas fa-chart-bar"></i> Treatment Gaps</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-chart-bar"></i> Analysis <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="treatment-gaps.html"><i class="fas fa-heartbeat"></i> Treatment Gaps</a></li>
+                        <li><a href="economic-impact.html"><i class="fas fa-dollar-sign"></i> Economic Impact</a></li>
+                        <li><a href="regional-analysis.html"><i class="fas fa-globe"></i> Regional Analysis</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-brain"></i> Disorders <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="depression.html"><i class="fas fa-sad-tear"></i> Depression</a></li>
+                        <li><a href="anxiety.html"><i class="fas fa-anxious"></i> Anxiety</a></li>
+                        <li><a href="bipolar.html"><i class="fas fa-wave-square"></i> Bipolar</a></li>
+                        <li><a href="substance-use.html"><i class="fas fa-pills"></i> Substance Use</a></li>
+                    </ul>
+                </li>
                 <li><a href="world-map.html"><i class="fas fa-map"></i> World Map</a></li>
-                <li><a href="data-sources.html"><i class="fas fa-database"></i> Data Sources</a></li>
-                <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="policy-simulator.html"><i class="fas fa-calculator"></i> Policy Simulator</a></li>
+                <li><a href="research-portal.html"><i class="fas fa-microscope"></i> Research Portal</a></li>
+                <li><a href="interventions.html"><i class="fas fa-hands-helping"></i> Interventions</a></li>
             </ul>
         </div>
     </nav>

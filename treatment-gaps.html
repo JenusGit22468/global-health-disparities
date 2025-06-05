@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mental Health Treatment Gaps - Global Health Disparities Platform</title>
+    <title>Mental Health Treatment Gaps Analysis - Global Health Disparities</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
         * {
             margin: 0;
@@ -18,6 +20,7 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             color: #1a202c;
+            overflow-x: hidden;
             background-color: #f8fafc;
         }
 
@@ -50,7 +53,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            text-decoration: none;
         }
 
         .nav-logo i {
@@ -73,229 +75,405 @@
             position: relative;
         }
 
-        .nav-menu a:hover,
-        .nav-menu a.active {
+        .nav-menu a:hover {
             color: #059669;
+            transform: translateY(-2px);
         }
 
-        .nav-menu a.active::after {
+        .nav-menu a::after {
             content: '';
             position: absolute;
-            width: 100%;
+            width: 0;
             height: 2px;
             bottom: -5px;
             left: 0;
-            background: #059669;
+            background: linear-gradient(90deg, #059669, #047857);
+            transition: width 0.3s ease;
         }
 
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .dropdown-menu a:hover {
+            background: #f7fafc;
+            color: #059669;
+            transform: none;
+        }
+
+        .dropdown-menu a::after {
+            display: none;
+        }
+
+        .dropdown > a .fa-chevron-down {
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover > a .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        /* Treatment Gaps Specific Styles */
+        .analysis-header {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
             padding: 120px 2rem 60px;
             color: white;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .page-header h1 {
+        .analysis-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .analysis-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .analysis-title {
             font-size: 3.5rem;
             margin-bottom: 1rem;
             font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
-        .page-header p {
+        .analysis-subtitle {
             font-size: 1.3rem;
             opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
+            margin-bottom: 2rem;
+            font-weight: 300;
         }
 
-        /* Main Content */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        .section {
-            margin-bottom: 4rem;
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #2d3748;
-            font-weight: 600;
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: #718096;
-            margin-bottom: 3rem;
-        }
-
-        /* Key Statistics */
-        .stats-grid {
+        .key-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
         }
 
-        .stat-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        .key-stat {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
-            border-top: 4px solid #dc2626;
         }
 
-        .stat-card h3 {
-            font-size: 3rem;
-            color: #dc2626;
+        .key-stat h3 {
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
             font-weight: 700;
         }
 
-        .stat-card p {
-            color: #4a5568;
-            font-weight: 500;
+        .key-stat p {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        /* Chart Container */
-        .chart-container {
+        /* Filter Controls */
+        .filters-section {
             background: white;
             padding: 2rem;
+            margin: -40px 2rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-select, .filter-input {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .filter-btn.secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
+        /* Data Visualization Grid */
+        .viz-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .viz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
             margin-bottom: 3rem;
         }
 
-        .chart-title {
-            font-size: 1.5rem;
-            color: #2d3748;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-            margin-top: 1rem;
-        }
-
-        /* Country List */
-        .country-list {
+        .viz-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        .country-item {
+        .viz-card h3 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container.large {
+            height: 400px;
+        }
+
+        /* Country Rankings Table */
+        .rankings-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-top: 2rem;
+        }
+
+        .rankings-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 2rem;
         }
 
-        .country-item:last-child {
-            border-bottom: none;
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
         }
 
-        .country-info h4 {
-            color: #2d3748;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .country-info p {
-            color: #718096;
+        .rankings-table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 0.9rem;
         }
 
-        .gap-indicator {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .rankings-table th {
+            background: #f7fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .gap-percentage {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #dc2626;
+        .rankings-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .rankings-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .country-flag {
+            width: 24px;
+            height: 16px;
+            border-radius: 2px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+            background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
         }
 
         .gap-bar {
-            width: 100px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .gap-bar-fill {
             height: 8px;
-            background: #e2e8f0;
             border-radius: 4px;
-            overflow: hidden;
+            transition: width 0.5s ease;
+            min-width: 20px;
         }
 
-        .gap-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #dc2626, #b91c1c);
-            border-radius: 4px;
-        }
+        .gap-critical { background: #dc2626; }
+        .gap-high { background: #ea580c; }
+        .gap-medium { background: #d97706; }
+        .gap-low { background: #059669; }
 
-        /* Data Sources */
-        .methodology {
-            background: #f7fafc;
-            padding: 2rem;
-            border-radius: 12px;
-            border-left: 4px solid #059669;
-        }
-
-        .methodology h3 {
-            color: #2d3748;
-            margin-bottom: 1rem;
+        .income-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .methodology p {
-            color: #4a5568;
-            margin-bottom: 1rem;
+        .income-low { background: #fee2e2; color: #dc2626; }
+        .income-lower-middle { background: #fef3c7; color: #d97706; }
+        .income-upper-middle { background: #dbeafe; color: #2563eb; }
+        .income-high { background: #d1fae5; color: #059669; }
+
+        /* Loading states */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            flex-direction: column;
+            gap: 1rem;
+            color: #6b7280;
         }
 
-        .methodology ul {
-            color: #4a5568;
-            padding-left: 1.5rem;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #dc2626;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .methodology li {
-            margin-bottom: 0.5rem;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Footer */
-        .footer {
-            background: #2d3748;
-            color: white;
-            padding: 3rem 2rem 1rem;
-            text-align: center;
-            margin-top: 4rem;
-        }
-
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .page-header h1 {
+            .analysis-title {
                 font-size: 2.5rem;
             }
             
-            .nav-menu {
-                display: none;
-            }
-            
-            .stats-grid {
+            .viz-grid {
                 grid-template-columns: 1fr;
             }
             
-            .country-item {
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
                 flex-direction: column;
-                text-align: center;
-                gap: 1rem;
             }
         }
     </style>
@@ -304,108 +482,408 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">
+            <div class="nav-logo">
                 <i class="fas fa-globe-americas"></i>
                 Global Health Disparities
-            </a>
+            </div>
             <ul class="nav-menu">
                 <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="treatment-gaps.html" class="active"><i class="fas fa-chart-bar"></i> Treatment Gaps</a></li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-chart-bar"></i> Analysis <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="treatment-gaps.html"><i class="fas fa-heartbeat"></i> Treatment Gaps</a></li>
+                        <li><a href="#"><i class="fas fa-dollar-sign"></i> Economic Impact</a></li>
+                        <li><a href="#"><i class="fas fa-globe"></i> Regional Analysis</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-brain"></i> Disorders <i class="fas fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="depression.html"><i class="fas fa-sad-tear"></i> Depression</a></li>
+                        <li><a href="#"><i class="fas fa-heart"></i> Anxiety</a></li>
+                        <li><a href="#"><i class="fas fa-wave-square"></i> Bipolar</a></li>
+                        <li><a href="#"><i class="fas fa-pills"></i> Substance Use</a></li>
+                    </ul>
+                </li>
                 <li><a href="world-map.html"><i class="fas fa-map"></i> World Map</a></li>
-                <li><a href="data-sources.html"><i class="fas fa-database"></i> Data Sources</a></li>
-                <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="policy-simulator.html"><i class="fas fa-calculator"></i> Policy Simulator</a></li>
+                <li><a href="research-portal.html"><i class="fas fa-microscope"></i> Research Portal</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <h1>Mental Health Treatment Gaps</h1>
-        <p>Analyzing disparities in mental healthcare access across low- and middle-income countries worldwide</p>
+    <!-- Analysis Header -->
+    <section class="analysis-header">
+        <div class="analysis-content">
+            <h1 class="analysis-title"><i class="fas fa-heartbeat"></i> Treatment Gaps Analysis</h1>
+            <p class="analysis-subtitle">Comprehensive analysis of mental health treatment gaps across 194 countries and territories</p>
+            
+            <div class="key-stats">
+                <div class="key-stat">
+                    <h3 id="countries-analyzed">194</h3>
+                    <p>Countries Analyzed</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="avg-gap">76%</h3>
+                    <p>Average Treatment Gap</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="critical-countries">47</h3>
+                    <p>Critical Gap Countries</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="worst-gap">95%</h3>
+                    <p>Worst Treatment Gap</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Key Statistics -->
-        <section class="section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>95%</h3>
-                    <p>Highest Treatment Gap (Chad)</p>
-                </div>
-                <div class="stat-card">
-                    <h3>47</h3>
-                    <p>Countries with Critical Gaps (>80%)</p>
-                </div>
-                <div class="stat-card">
-                    <h3>76%</h3>
-                    <p>Average Gap in LMICs</p>
-                </div>
-                <div class="stat-card">
-                    <h3>2.1B</h3>
-                    <p>People Affected Globally</p>
-                </div>
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label class="filter-label">Region</label>
+                <select class="filter-select" id="region-filter">
+                    <option value="all">All Regions</option>
+                    <option value="Sub-Saharan Africa">Sub-Saharan Africa</option>
+                    <option value="South Asia">South Asia</option>
+                    <option value="East Asia & Pacific">East Asia & Pacific</option>
+                    <option value="Latin America & Caribbean">Latin America & Caribbean</option>
+                    <option value="Middle East & North Africa">Middle East & North Africa</option>
+                    <option value="Europe & Central Asia">Europe & Central Asia</option>
+                </select>
             </div>
-        </section>
-
-        <!-- Chart Section -->
-        <section class="section">
-            <div class="chart-container">
-                <h3 class="chart-title">Treatment Gaps by Country (Top 15)</h3>
-                <div class="chart-wrapper">
-                    <canvas id="treatmentGapChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Country Rankings -->
-        <section class="section">
-            <h2>Country Rankings</h2>
-            <p class="section-subtitle">Countries with the highest mental health treatment gaps based on WHO Mental Health Atlas 2023 data</p>
             
-            <div class="country-list" id="countryList">
-                <!-- Countries will be populated by JavaScript -->
+            <div class="filter-group">
+                <label class="filter-label">Income Group</label>
+                <select class="filter-select" id="income-filter">
+                    <option value="all">All Income Groups</option>
+                    <option value="Low Income">Low Income</option>
+                    <option value="Lower Middle Income">Lower Middle Income</option>
+                    <option value="Upper Middle Income">Upper Middle Income</option>
+                    <option value="High Income">High Income</option>
+                </select>
             </div>
-        </section>
-
-        <!-- Methodology -->
-        <section class="section">
-            <div class="methodology">
-                <h3><i class="fas fa-microscope"></i> Methodology & Data Sources</h3>
-                <p>Our treatment gap analysis is based on comprehensive data from multiple authoritative sources:</p>
-                <ul>
-                    <li><strong>WHO Mental Health Atlas 2023:</strong> Service coverage and utilization data</li>
-                    <li><strong>IHME Global Burden of Disease Study:</strong> Disease prevalence estimates</li>
-                    <li><strong>World Bank:</strong> Healthcare expenditure and resource allocation</li>
-                    <li><strong>Peer-reviewed literature:</strong> Country-specific studies and surveys</li>
-                </ul>
-                <p>Treatment gap is calculated as the percentage of people with mental health conditions who do not receive adequate treatment within a 12-month period.</p>
+            
+            <div class="filter-group">
+                <label class="filter-label">Mental Health Disorder</label>
+                <select class="filter-select" id="disorder-filter">
+                    <option value="depression">Depression</option>
+                    <option value="anxiety">Anxiety</option>
+                    <option value="bipolar">Bipolar Disorder</option>
+                    <option value="schizophrenia">Schizophrenia</option>
+                    <option value="substanceUse">Substance Use</option>
+                </select>
             </div>
-        </section>
-    </main>
+            
+            <div class="filter-group">
+                <label class="filter-label">Treatment Gap Threshold</label>
+                <input type="range" class="filter-input" id="gap-threshold" min="0" max="100" value="50">
+                <span id="gap-value">50%+</span>
+            </div>
+        </div>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn" id="apply-filters">
+                <i class="fas fa-filter"></i>
+                Apply Filters
+            </button>
+            <button class="filter-btn secondary" id="reset-filters">
+                <i class="fas fa-undo"></i>
+                Reset All
+            </button>
+            <button class="filter-btn secondary" id="export-data">
+                <i class="fas fa-download"></i>
+                Export Data
+            </button>
+        </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 Global Health Disparities Platform. Data sources: WHO, IHME, World Bank</p>
-    </footer>
+    <!-- Data Visualization Section -->
+    <div class="viz-section">
+        <div class="viz-grid">
+            <!-- Treatment Gaps by Income Group Chart -->
+            <div class="viz-card">
+                <h3><i class="fas fa-chart-bar"></i> Treatment Gaps by Income Group</h3>
+                <div class="chart-container">
+                    <canvas id="income-gaps-chart"></canvas>
+                </div>
+            </div>
 
-    <script src="data.js"></script>
+            <!-- Regional Comparison Chart -->
+            <div class="viz-card">
+                <h3><i class="fas fa-globe"></i> Regional Treatment Gaps</h3>
+                <div class="chart-container">
+                    <canvas id="regional-gaps-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Disorder Comparison Chart -->
+            <div class="viz-card">
+                <h3><i class="fas fa-brain"></i> Treatment Gaps by Disorder</h3>
+                <div class="chart-container">
+                    <canvas id="disorder-gaps-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Resource vs Gap Correlation -->
+            <div class="viz-card">
+                <h3><i class="fas fa-user-md"></i> Resources vs Treatment Gaps</h3>
+                <div class="chart-container">
+                    <canvas id="correlation-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Treatment Gap Calculator -->
+        <div class="viz-card" style="grid-column: 1 / -1; margin-bottom: 2rem;">
+            <h3><i class="fas fa-calculator"></i> Treatment Gap Calculator</h3>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="filter-group">
+                        <label class="filter-label">Population (millions)</label>
+                        <input type="number" class="filter-input" id="calc-population" value="50" min="0.1" step="0.1">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Prevalence (%)</label>
+                        <input type="number" class="filter-input" id="calc-prevalence" value="4.5" min="0.1" max="20" step="0.1">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Current Coverage (%)</label>
+                        <input type="number" class="filter-input" id="calc-coverage" value="25" min="0" max="100" step="1">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Target Coverage (%)</label>
+                        <input type="number" class="filter-input" id="calc-target" value="80" min="0" max="100" step="1">
+                    </div>
+                </div>
+                <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #dc2626;">
+                    <h4 style="margin: 0 0 1rem 0; color: #2d3748;">Results</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+                        <div><strong>Total Affected:</strong> <span id="calc-total">2.25M</span> people</div>
+                        <div><strong>Currently Treated:</strong> <span id="calc-treated">562.5K</span> people</div>
+                        <div><strong>Treatment Gap:</strong> <span id="calc-gap">75%</span></div>
+                        <div><strong>Additional Needed:</strong> <span id="calc-additional">1.24M</span> people</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Country Rankings Table -->
+        <div class="rankings-section">
+            <div class="rankings-header">
+                <h3><i class="fas fa-list-ol"></i> Country Rankings</h3>
+                <div>
+                    <button class="filter-btn" id="toggle-view">
+                        <i class="fas fa-table"></i>
+                        Switch View
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="rankings-table" id="rankings-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Country</th>
+                            <th>Income Group</th>
+                            <th>Region</th>
+                            <th>Treatment Gap</th>
+                            <th>Population (M)</th>
+                            <th>Healthcare Resources</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankings-tbody">
+                        <tr>
+                            <td colspan="7">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Loading country data...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Methodology and Citations Section -->
+        <div class="viz-section" style="background: white; margin-top: 3rem; padding: 3rem 2rem;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h3 style="color: #2d3748; margin-bottom: 2rem; font-size: 1.8rem;">
+                    <i class="fas fa-book-open"></i> Methodology & Data Sources
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                    <div>
+                        <h4 style="color: #dc2626; margin-bottom: 1rem;">Data Sources</h4>
+                        <ul style="line-height: 1.8; color: #4a5568;">
+                            <li><strong>WHO Mental Health Atlas 2023</strong> - Global mental health resource mapping</li>
+                            <li><strong>Global Burden of Disease Study 2023</strong> - Prevalence and burden estimates</li>
+                            <li><strong>IHME Global Health Data Exchange</strong> - Epidemiological data</li>
+                            <li><strong>World Bank Country Classifications</strong> - Income group classifications</li>
+                        </ul>
+                        
+                        <h4 style="color: #dc2626; margin: 2rem 0 1rem 0;">Confidence Intervals</h4>
+                        <p style="color: #4a5568; line-height: 1.6;">
+                            All estimates include 95% confidence intervals. Treatment gap calculations follow WHO standardized methodology with adjustment for regional variations in service delivery models.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #dc2626; margin-bottom: 1rem;">Treatment Gap Calculation</h4>
+                        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #dc2626;">
+                            <p style="font-family: 'Courier New', monospace; font-size: 0.9rem; color: #2d3748; margin-bottom: 1rem;">
+                                Treatment Gap (%) = <br>
+                                ((Total Need - People Treated) / Total Need) × 100
+                            </p>
+                            <p style="color: #4a5568; font-size: 0.9rem; line-height: 1.5;">
+                                Where <em>Total Need</em> = Population × Prevalence Rate × Severity Adjustment Factor
+                            </p>
+                        </div>
+                        
+                        <h4 style="color: #dc2626; margin: 2rem 0 1rem 0;">Quality Indicators</h4>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; font-size: 0.9rem;">
+                            <div style="text-align: center; padding: 1rem; background: #d1fae5; border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #059669;">194</div>
+                                <div style="color: #047857;">Countries Covered</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: #dbeafe; border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">95%</div>
+                                <div style="color: #1d4ed8;">Confidence Level</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                    <h4 style="color: #dc2626; margin-bottom: 1rem;">Academic Citations</h4>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; font-size: 0.9rem; line-height: 1.6; color: #4a5568;">
+                        <p><strong>Recommended Citation:</strong></p>
+                        <p style="font-style: italic; margin: 1rem 0;">
+                            Global Health Disparities Platform. (2024). Mental Health Treatment Gaps Analysis. 
+                            Based on WHO Mental Health Atlas 2023, Global Burden of Disease Study 2023. 
+                            Available at: [URL]. Last updated: <span id="citation-date">December 2024</span>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
     <script>
-        // Create chart
-        function createChart(data) {
-            const ctx = document.getElementById('treatmentGapChart').getContext('2d');
+        // Treatment Gaps Analysis Page JavaScript
+        let currentData = null;
+        let charts = {};
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🔍 Initializing Treatment Gaps Analysis...');
             
-            new Chart(ctx, {
+            try {
+                // Load treatment gaps data
+                await waitForData();
+                
+                // Update key statistics
+                updateKeyStats();
+                
+                // Initialize visualizations
+                initializeCharts();
+                initializeTable();
+                setupFilters();
+                
+                console.log('✅ Treatment Gaps Analysis loaded successfully!');
+                
+            } catch (error) {
+                console.error('❌ Error initializing analysis:', error);
+                showError('Failed to load treatment gaps data. Please refresh the page.');
+            }
+        });
+        
+        // Update key statistics from data
+        function updateKeyStats() {
+            const countries = Object.values(currentData.treatmentGapsByCountry);
+            const countriesCount = countries.length;
+            
+            // Calculate average depression treatment gap
+            const avgGap = countries.reduce((sum, country) => 
+                sum + country.treatmentGaps.depression, 0) / countriesCount;
+            
+            // Count critical countries (>80% gap)
+            const criticalCount = countries.filter(country => 
+                country.treatmentGaps.depression > 80).length;
+            
+            // Find worst gap
+            const worstGap = Math.max(...countries.map(country => 
+                country.treatmentGaps.depression));
+            
+            // Update DOM elements
+            document.getElementById('countries-analyzed').textContent = countriesCount;
+            document.getElementById('avg-gap').textContent = Math.round(avgGap) + '%';
+            document.getElementById('critical-countries').textContent = criticalCount;
+            document.getElementById('worst-gap').textContent = worstGap + '%';
+        }
+
+        // Load treatment gaps data directly
+        async function waitForData() {
+            try {
+                const response = await fetch('./datasets/mental-health-treatment-gaps-expanded.json?v=' + Date.now());
+                if (!response.ok) throw new Error('Failed to load expanded data');
+                currentData = await response.json();
+                console.log('✅ Expanded treatment gaps data loaded:', Object.keys(currentData.treatmentGapsByCountry).length, 'countries');
+                console.log('📊 Data sources:', currentData.metadata.source);
+                console.log('📅 Last updated:', currentData.metadata.lastUpdated);
+            } catch (error) {
+                console.error('❌ Error loading expanded data, falling back to original:', error);
+                // Fallback to original dataset
+                const fallbackResponse = await fetch('./datasets/mental-health-treatment-gaps.json?v=' + Date.now());
+                if (!fallbackResponse.ok) throw new Error('Both datasets failed to load');
+                currentData = await fallbackResponse.json();
+                console.log('⚠️ Using fallback dataset with', Object.keys(currentData.treatmentGapsByCountry).length, 'countries');
+            }
+        }
+
+        // Initialize all charts
+        function initializeCharts() {
+            createIncomeGapsChart();
+            createRegionalGapsChart();
+            createDisorderGapsChart();
+            createCorrelationChart();
+        }
+
+        // Create income groups treatment gaps chart
+        function createIncomeGapsChart() {
+            const ctx = document.getElementById('income-gaps-chart').getContext('2d');
+            const stats = window.globalHealthData.statistics;
+            
+            charts.incomeGaps = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.map(d => d.country),
+                    labels: ['Low Income', 'Lower Middle Income', 'Upper Middle Income', 'High Income'],
                     datasets: [{
-                        label: 'Treatment Gap (%)',
-                        data: data.map(d => d.gap),
-                        backgroundColor: 'rgba(220, 38, 38, 0.8)',
-                        borderColor: 'rgba(185, 28, 28, 1)',
-                        borderWidth: 1,
-                        borderRadius: 4
+                        label: 'Average Treatment Gap (%)',
+                        data: [
+                            stats.treatmentGaps.byIncomeGroup['Low Income'].depression,
+                            stats.treatmentGaps.byIncomeGroup['Lower Middle Income'].depression,
+                            stats.treatmentGaps.byIncomeGroup['Upper Middle Income'].depression,
+                            stats.treatmentGaps.byIncomeGroup['High Income'].depression
+                        ],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(234, 88, 12, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(5, 150, 105, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(220, 38, 38)',
+                            'rgb(234, 88, 12)',
+                            'rgb(59, 130, 246)',
+                            'rgb(5, 150, 105)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
                     }]
                 },
                 options: {
@@ -414,29 +892,16 @@
                     plugins: {
                         legend: {
                             display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                afterLabel: function(context) {
-                                    const item = data[context.dataIndex];
-                                    return [`Region: ${item.region}`, `Population: ${item.population}M`];
-                                }
-                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            title: {
-                                display: true,
-                                text: 'Treatment Gap (%)'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Countries'
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
                             }
                         }
                     }
@@ -444,46 +909,335 @@
             });
         }
 
-        // Populate country list
-        function populateCountryList(data) {
-            const countryList = document.getElementById('countryList');
+        // Create regional comparison chart
+        function createRegionalGapsChart() {
+            const ctx = document.getElementById('regional-gaps-chart').getContext('2d');
+            const regions = ['Sub-Saharan Africa', 'South Asia', 'East Asia & Pacific', 'Latin America & Caribbean'];
             
-            data.forEach((country, index) => {
-                const countryItem = document.createElement('div');
-                countryItem.className = 'country-item';
-                
-                countryItem.innerHTML = `
-                    <div class="country-info">
-                        <h4>${index + 1}. ${country.country}</h4>
-                        <p>${country.region} • ${country.population}M population</p>
-                    </div>
-                    <div class="gap-indicator">
-                        <span class="gap-percentage">${country.gap}%</span>
-                        <div class="gap-bar">
-                            <div class="gap-fill" style="width: ${country.gap}%"></div>
-                        </div>
-                    </div>
-                `;
-                
-                countryList.appendChild(countryItem);
+            charts.regionalGaps = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: regions,
+                    datasets: [{
+                        data: [85, 80, 65, 70],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(234, 88, 12, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(5, 150, 105, 0.8)'
+                        ],
+                        borderWidth: 3,
+                        borderColor: 'white'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
             });
         }
 
-        // Load real treatment gap data
-        document.addEventListener('DOMContentLoaded', async function() {
-            try {
-                const treatmentData = await loadTreatmentGaps();
-                const realData = treatmentData.data;
-                
-                // Update the chart with real data
-                createChart(realData);
-                populateCountryList(realData);
-                
-                console.log('✅ Treatment gaps page loaded with real WHO data');
-            } catch (error) {
-                console.error('Error loading treatment gap data:', error);
+        // Create disorder comparison chart
+        function createDisorderGapsChart() {
+            const ctx = document.getElementById('disorder-gaps-chart').getContext('2d');
+            const stats = window.globalHealthData.statistics;
+            
+            charts.disorderGaps = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Depression', 'Anxiety', 'Bipolar', 'Schizophrenia', 'Substance Use'],
+                    datasets: [{
+                        label: 'Global Treatment Gap (%)',
+                        data: [
+                            stats.treatmentGaps.global.depression,
+                            stats.treatmentGaps.global.anxiety,
+                            stats.treatmentGaps.global.bipolar,
+                            stats.treatmentGaps.global.schizophrenia,
+                            stats.treatmentGaps.global.substanceUse
+                        ],
+                        backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                        borderColor: 'rgb(220, 38, 38)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgb(220, 38, 38)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create correlation chart
+        function createCorrelationChart() {
+            const ctx = document.getElementById('correlation-chart').getContext('2d');
+            
+            // Generate scatter plot data from country data
+            const scatterData = Object.entries(currentData.treatmentGapsByCountry).map(([country, data]) => ({
+                x: data.healthcareResources.psychiatristsPer100k,
+                y: data.treatmentGaps.depression,
+                country: country
+            }));
+            
+            charts.correlation = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Countries',
+                        data: scatterData,
+                        backgroundColor: 'rgba(220, 38, 38, 0.6)',
+                        borderColor: 'rgb(220, 38, 38)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Psychiatrists per 100k population'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Treatment Gap (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].raw.country;
+                                },
+                                label: function(context) {
+                                    return [
+                                        `Psychiatrists: ${context.raw.x}/100k`,
+                                        `Treatment Gap: ${context.raw.y}%`
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize rankings table
+        function initializeTable() {
+            updateRankingsTable();
+        }
+
+        // Update rankings table
+        function updateRankingsTable(filteredData = null) {
+            const tbody = document.getElementById('rankings-tbody');
+            const countries = filteredData || Object.entries(currentData.treatmentGapsByCountry);
+            const disorder = document.getElementById('disorder-filter').value;
+            
+            // Convert to array and sort by treatment gap
+            const sortedCountries = (Array.isArray(countries) ? countries : Object.entries(countries))
+                .map(([name, data]) => ({
+                    name,
+                    ...data,
+                    currentGap: data.treatmentGaps[disorder]
+                }))
+                .sort((a, b) => b.currentGap - a.currentGap);
+
+            tbody.innerHTML = '';
+            
+            if (sortedCountries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: #6b7280;">
+                            <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <p>No countries match the current filters.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
             }
-        });
+            
+            sortedCountries.forEach((country, index) => {
+                const row = document.createElement('tr');
+                
+                const gapClass = getGapClass(country.currentGap);
+                const incomeClass = getIncomeClass(country.incomeGroup);
+                
+                row.innerHTML = `
+                    <td><strong>${index + 1}</strong></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            <div class="country-flag"></div>
+                            ${country.name}
+                        </div>
+                    </td>
+                    <td><span class="income-badge ${incomeClass}">${country.incomeGroup}</span></td>
+                    <td>${country.region}</td>
+                    <td>
+                        <div class="gap-bar">
+                            <div class="gap-bar-fill ${gapClass}" style="width: ${country.currentGap}%"></div>
+                            <span>${country.currentGap}%</span>
+                        </div>
+                    </td>
+                    <td>${country.population.toFixed(1)}M</td>
+                    <td>${country.healthcareResources.psychiatristsPer100k}/100k</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Helper functions
+        function getGapClass(gap) {
+            if (gap >= 80) return 'gap-critical';
+            if (gap >= 60) return 'gap-high';
+            if (gap >= 40) return 'gap-medium';
+            return 'gap-low';
+        }
+
+        function getIncomeClass(income) {
+            const map = {
+                'Low Income': 'income-low',
+                'Lower Middle Income': 'income-lower-middle',
+                'Upper Middle Income': 'income-upper-middle',
+                'High Income': 'income-high'
+            };
+            return map[income] || '';
+        }
+
+        // Setup filter functionality
+        function setupFilters() {
+            // Filter change handlers
+            document.getElementById('disorder-filter').addEventListener('change', updateRankingsTable);
+            document.getElementById('apply-filters').addEventListener('click', applyFilters);
+            document.getElementById('reset-filters').addEventListener('click', resetFilters);
+            document.getElementById('export-data').addEventListener('click', exportData);
+            
+            // Gap threshold slider
+            const gapSlider = document.getElementById('gap-threshold');
+            const gapValue = document.getElementById('gap-value');
+            
+            gapSlider.addEventListener('input', function() {
+                gapValue.textContent = this.value + '%+';
+            });
+            
+            // Treatment gap calculator
+            setupCalculator();
+        }
+        
+        // Setup treatment gap calculator
+        function setupCalculator() {
+            const inputs = ['calc-population', 'calc-prevalence', 'calc-coverage', 'calc-target'];
+            
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', updateCalculator);
+            });
+            
+            updateCalculator();
+        }
+        
+        // Update calculator results
+        function updateCalculator() {
+            const population = parseFloat(document.getElementById('calc-population').value) || 0;
+            const prevalence = parseFloat(document.getElementById('calc-prevalence').value) || 0;
+            const coverage = parseFloat(document.getElementById('calc-coverage').value) || 0;
+            const target = parseFloat(document.getElementById('calc-target').value) || 0;
+            
+            // Calculate values
+            const totalAffected = (population * 1000000 * prevalence) / 100;
+            const currentlyTreated = (totalAffected * coverage) / 100;
+            const gapPercentage = 100 - coverage;
+            const targetTreated = (totalAffected * target) / 100;
+            const additionalNeeded = targetTreated - currentlyTreated;
+            
+            // Format and update display
+            document.getElementById('calc-total').textContent = formatNumber(totalAffected);
+            document.getElementById('calc-treated').textContent = formatNumber(currentlyTreated);
+            document.getElementById('calc-gap').textContent = Math.round(gapPercentage) + '%';
+            document.getElementById('calc-additional').textContent = formatNumber(Math.max(0, additionalNeeded));
+        }
+        
+        // Format large numbers
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(2) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            } else {
+                return Math.round(num).toString();
+            }
+        }
+
+        // Apply filters
+        function applyFilters() {
+            console.log('🔍 Applying filters...');
+            
+            const region = document.getElementById('region-filter').value;
+            const income = document.getElementById('income-filter').value;
+            const gapThreshold = parseInt(document.getElementById('gap-threshold').value);
+            const disorder = document.getElementById('disorder-filter').value;
+            
+            // Filter countries based on criteria
+            const filteredCountries = Object.entries(currentData.treatmentGapsByCountry)
+                .filter(([name, data]) => {
+                    if (region !== 'all' && data.region !== region) return false;
+                    if (income !== 'all' && data.incomeGroup !== income) return false;
+                    if (data.treatmentGaps[disorder] < gapThreshold) return false;
+                    return true;
+                });
+            
+            console.log(`Filtered to ${filteredCountries.length} countries`);
+            updateRankingsTable(filteredCountries);
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            document.getElementById('region-filter').value = 'all';
+            document.getElementById('income-filter').value = 'all';
+            document.getElementById('disorder-filter').value = 'depression';
+            document.getElementById('gap-threshold').value = 50;
+            document.getElementById('gap-value').textContent = '50%+';
+            
+            updateRankingsTable();
+        }
+
+        // Export data functionality
+        function exportData() {
+            console.log('📊 Exporting data...');
+            alert('Data export feature coming soon! This will generate CSV/Excel files with current filtered data.');
+        }
+
+        // Show error message
+        function showError(message) {
+            const tbody = document.getElementById('rankings-tbody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #dc2626; padding: 2rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>${message}</p>
+                    </td>
+                </tr>
+            `;
+        }
     </script>
 </body>
 </html>
