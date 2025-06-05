@@ -541,6 +541,13 @@
             g = svg.append('g');
         }
 
+        // Get country name from properties
+        function getCountryName(d) {
+            return d.properties.NAME || d.properties.name || d.properties.NAME_EN || 
+                   d.properties.ADMIN || d.properties.admin || d.properties.NAME_LONG || 
+                   d.properties.NAME_SORT || d.id || 'Unknown';
+        }
+
         // Render the map
         function renderMap() {
             if (!worldData || !healthData) return;
@@ -552,7 +559,11 @@
                 .enter().append('path')
                 .attr('class', 'country')
                 .attr('d', path)
-                .attr('data-name', d => d.properties.NAME || 'Unknown')
+                .attr('data-name', d => {
+                    const name = getCountryName(d);
+                    console.log('Country properties:', d.properties, 'Using name:', name);
+                    return name;
+                })
                 .on('mouseover', handleCountryHover)
                 .on('mouseout', handleCountryLeave)
                 .on('click', handleCountryClick);
@@ -564,13 +575,13 @@
         function updateMapColors() {
             g.selectAll('.country')
                 .attr('class', d => {
-                    const countryName = d.properties.NAME || 'Unknown';
+                    const countryName = getCountryName(d);
                     const colorClass = getCountryColorClass(countryName);
                     return `country ${colorClass}`;
                 })
                 .style('opacity', d => {
                     if (currentRegion === 'all') return 1;
-                    const countryData = getCountryData(d.properties.NAME);
+                    const countryData = getCountryData(getCountryName(d));
                     return (countryData && countryData.region === currentRegion) ? 1 : 0.3;
                 });
         }
@@ -635,7 +646,7 @@
 
         // Handle country hover
         function handleCountryHover(event, d) {
-            const countryName = d.properties.NAME || 'Unknown';
+            const countryName = getCountryName(d);
             const countryData = getCountryData(countryName);
             
             const tooltip = document.getElementById('tooltip');
@@ -667,7 +678,7 @@
 
         // Handle country click
         function handleCountryClick(event, d) {
-            const countryName = d.properties.NAME || 'Unknown';
+            const countryName = getCountryName(d);
             const countryData = getCountryData(countryName);
             
             showCountryInfo(countryName, countryData);
