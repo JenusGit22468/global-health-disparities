@@ -667,7 +667,7 @@
         // Initialize the map
         async function initializeMap() {
             try {
-                console.log('=ú Initializing world map...');
+                console.log('=ï¿½ Initializing world map...');
                 
                 // Load world topology and health data
                 await Promise.all([
@@ -699,7 +699,7 @@
                 if (!response.ok) throw new Error('Failed to load world data');
                 
                 worldData = await response.json();
-                console.log('=Í World topology data loaded');
+                console.log('=ï¿½ World topology data loaded');
                 
             } catch (error) {
                 console.error('Error loading world data:', error);
@@ -715,7 +715,7 @@
                 if (!response.ok) throw new Error('Failed to load health data');
                 
                 healthData = await response.json();
-                console.log('=Ê Health data loaded');
+                console.log('=ï¿½ Health data loaded');
                 
             } catch (error) {
                 console.error('Error loading health data:', error);
@@ -834,16 +834,91 @@
             
             // Try exact match first
             let data = healthData.treatmentGapsByCountry[countryName];
-            if (data) return data;
+            if (data) return enhanceCountryData(data);
+
+            // Try mapped name
+            const mappedName = countryNameMap[countryName];
+            if (mappedName && healthData.treatmentGapsByCountry[mappedName]) {
+                return enhanceCountryData(healthData.treatmentGapsByCountry[mappedName]);
+            }
 
             // Try fuzzy matching
             const countries = Object.keys(healthData.treatmentGapsByCountry);
             const match = countries.find(country => 
                 country.toLowerCase().includes(countryName.toLowerCase()) ||
-                countryName.toLowerCase().includes(country.toLowerCase())
+                countryName.toLowerCase().includes(country.toLowerCase()) ||
+                normalizeCountryName(country) === normalizeCountryName(countryName)
             );
 
-            return match ? healthData.treatmentGapsByCountry[match] : null;
+            return match ? enhanceCountryData(healthData.treatmentGapsByCountry[match]) : null;
+        }
+
+        // Country name mapping for topology vs dataset mismatches
+        const countryNameMap = {
+            'United States of America': 'United States',
+            'United Kingdom': 'United Kingdom',
+            'Russian Federation': 'Russia',
+            'Democratic Republic of the Congo': 'Democratic Republic of Congo',
+            'Republic of the Congo': 'Congo',
+            'Czech Republic': 'Czechia',
+            'Republic of Korea': 'South Korea',
+            'Democratic People\'s Republic of Korea': 'North Korea',
+            'Lao People\'s Democratic Republic': 'Laos',
+            'Syrian Arab Republic': 'Syria',
+            'Iran (Islamic Republic of)': 'Iran',
+            'Venezuela (Bolivarian Republic of)': 'Venezuela',
+            'Bolivia (Plurinational State of)': 'Bolivia',
+            'Tanzania (United Republic of)': 'Tanzania',
+            'Moldova (Republic of)': 'Moldova',
+            'Macedonia (the former Yugoslav Republic of)': 'North Macedonia',
+            'CÃ´te d\'Ivoire': 'Ivory Coast',
+            'Myanmar': 'Myanmar',
+            'Timor-Leste': 'East Timor',
+            'Swaziland': 'Eswatini'
+        };
+
+        // Normalize country names for better matching
+        function normalizeCountryName(name) {
+            // First try direct mapping
+            if (countryNameMap[name]) {
+                return countryNameMap[name];
+            }
+            
+            return name.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/[^\w]/g, '')
+                .replace('unitedstates', 'usa')
+                .replace('unitedkingdom', 'uk')
+                .replace('russianfederation', 'russia')
+                .replace('democraticrepublicofcongo', 'drcongo')
+                .replace('republicofcongo', 'congo');
+        }
+
+        // Enhance country data with calculated fields
+        function enhanceCountryData(data) {
+            if (!data) return null;
+            
+            // Calculate overall treatment gap average
+            const gaps = data.treatmentGaps;
+            const overallGap = gaps ? 
+                Math.round((gaps.depression + gaps.anxiety + gaps.bipolar + gaps.schizophrenia + gaps.substanceUse) / 5) : 0;
+            
+            // Add missing fields
+            return {
+                ...data,
+                treatmentGaps: {
+                    ...gaps,
+                    overall: overallGap
+                },
+                economicImpact: data.economicImpact || { gdpPercentage: 3.5 }, // Default estimate
+                healthcareResources: {
+                    workersPerThousand: (data.healthcareResources?.psychiatristsPer100k || 0) * 10 + 
+                                       (data.healthcareResources?.psychologistsPer100k || 0) * 10,
+                    bedsPerThousand: (data.healthcareResources?.mentalHealthBedsPer100k || 0) * 10
+                },
+                healthExpenditure: data.healthExpenditure || { percentGDP: 6.0 }, // Default estimate
+                population: data.population * 1000000 // Convert from millions to actual number
+            };
         }
 
         // Handle country hover
