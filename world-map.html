@@ -499,16 +499,19 @@
         // Load health data
         async function loadHealthData() {
             try {
+                console.log('📊 Attempting to load health data...');
                 const response = await fetch('./datasets/mental-health-treatment-gaps.json');
                 if (!response.ok) throw new Error('Failed to load health data');
                 
-                healthData = await response.json();
-                console.log('📊 Health data loaded');
+                const data = await response.json();
+                console.log('📊 Health data loaded from file:', data);
+                healthData = data;
                 
             } catch (error) {
-                console.error('Error loading health data:', error);
-                // Use fallback data
+                console.error('❌ Error loading health data, using fallback:', error);
+                // Always use fallback data for now to test
                 healthData = createFallbackData();
+                console.log('📊 Using fallback health data:', healthData);
             }
         }
 
@@ -574,15 +577,22 @@
 
         // Get country data
         function getCountryData(countryName) {
-            if (!healthData || !healthData.treatmentGapsByCountry) return null;
+            if (!healthData || !healthData.treatmentGapsByCountry) {
+                console.log('❌ No health data available');
+                return null;
+            }
             
             // Try exact match
             let data = healthData.treatmentGapsByCountry[countryName];
-            if (data) return data;
+            if (data) {
+                console.log('✅ Found exact match for:', countryName);
+                return data;
+            }
 
             // Try mapped name
             const mappedName = countryNameMap[countryName];
             if (mappedName && healthData.treatmentGapsByCountry[mappedName]) {
+                console.log('✅ Found mapped match for:', countryName, '->', mappedName);
                 return healthData.treatmentGapsByCountry[mappedName];
             }
 
@@ -593,7 +603,13 @@
                 countryName.toLowerCase().includes(country.toLowerCase())
             );
 
-            return match ? healthData.treatmentGapsByCountry[match] : null;
+            if (match) {
+                console.log('✅ Found fuzzy match for:', countryName, '->', match);
+                return healthData.treatmentGapsByCountry[match];
+            }
+
+            console.log('❌ No data found for:', countryName, 'Available countries:', countries.slice(0, 5));
+            return null;
         }
 
         // Get color class for country
@@ -724,24 +740,25 @@
             });
         }
 
-        // Create fallback data
+        // Create fallback data with many countries for testing
         function createFallbackData() {
             return {
                 treatmentGapsByCountry: {
-                    "United States": {
-                        region: "Americas Region",
-                        incomeGroup: "High Income",
-                        population: 331.9,
-                        treatmentGaps: { depression: 45, anxiety: 47, bipolar: 40, schizophrenia: 35, substanceUse: 60 },
-                        healthcareResources: { psychiatristsPer100k: 15.2 }
-                    },
-                    "Germany": {
-                        region: "European Region",
-                        incomeGroup: "High Income",
-                        population: 83.2,
-                        treatmentGaps: { depression: 30, anxiety: 32, bipolar: 25, schizophrenia: 20, substanceUse: 45 },
-                        healthcareResources: { psychiatristsPer100k: 18.5 }
-                    }
+                    "United States": { region: "Americas Region", incomeGroup: "High Income", population: 331.9, treatmentGaps: { depression: 45, anxiety: 47, bipolar: 40, schizophrenia: 35, substanceUse: 60 }, healthcareResources: { psychiatristsPer100k: 15.2 } },
+                    "United States of America": { region: "Americas Region", incomeGroup: "High Income", population: 331.9, treatmentGaps: { depression: 45, anxiety: 47, bipolar: 40, schizophrenia: 35, substanceUse: 60 }, healthcareResources: { psychiatristsPer100k: 15.2 } },
+                    "Germany": { region: "European Region", incomeGroup: "High Income", population: 83.2, treatmentGaps: { depression: 30, anxiety: 32, bipolar: 25, schizophrenia: 20, substanceUse: 45 }, healthcareResources: { psychiatristsPer100k: 18.5 } },
+                    "France": { region: "European Region", incomeGroup: "High Income", population: 67.4, treatmentGaps: { depression: 35, anxiety: 38, bipolar: 28, schizophrenia: 22, substanceUse: 50 }, healthcareResources: { psychiatristsPer100k: 22.1 } },
+                    "United Kingdom": { region: "European Region", incomeGroup: "High Income", population: 67.3, treatmentGaps: { depression: 40, anxiety: 42, bipolar: 35, schizophrenia: 25, substanceUse: 55 }, healthcareResources: { psychiatristsPer100k: 18.0 } },
+                    "Japan": { region: "Western Pacific Region", incomeGroup: "High Income", population: 125.8, treatmentGaps: { depression: 50, anxiety: 55, bipolar: 45, schizophrenia: 30, substanceUse: 70 }, healthcareResources: { psychiatristsPer100k: 11.7 } },
+                    "China": { region: "Western Pacific Region", incomeGroup: "Upper Middle Income", population: 1439.3, treatmentGaps: { depression: 75, anxiety: 80, bipolar: 70, schizophrenia: 60, substanceUse: 85 }, healthcareResources: { psychiatristsPer100k: 2.2 } },
+                    "India": { region: "South-East Asia Region", incomeGroup: "Lower Middle Income", population: 1380.0, treatmentGaps: { depression: 85, anxiety: 90, bipolar: 80, schizophrenia: 75, substanceUse: 95 }, healthcareResources: { psychiatristsPer100k: 0.3 } },
+                    "Brazil": { region: "Americas Region", incomeGroup: "Upper Middle Income", population: 212.6, treatmentGaps: { depression: 65, anxiety: 70, bipolar: 60, schizophrenia: 50, substanceUse: 80 }, healthcareResources: { psychiatristsPer100k: 3.2 } },
+                    "Canada": { region: "Americas Region", incomeGroup: "High Income", population: 38.0, treatmentGaps: { depression: 35, anxiety: 40, bipolar: 30, schizophrenia: 25, substanceUse: 50 }, healthcareResources: { psychiatristsPer100k: 13.6 } },
+                    "Australia": { region: "Western Pacific Region", incomeGroup: "High Income", population: 25.7, treatmentGaps: { depression: 25, anxiety: 30, bipolar: 20, schizophrenia: 15, substanceUse: 40 }, healthcareResources: { psychiatristsPer100k: 20.4 } },
+                    "Nigeria": { region: "African Region", incomeGroup: "Lower Middle Income", population: 218.5, treatmentGaps: { depression: 95, anxiety: 97, bipolar: 93, schizophrenia: 90, substanceUse: 98 }, healthcareResources: { psychiatristsPer100k: 0.1 } },
+                    "South Africa": { region: "African Region", incomeGroup: "Upper Middle Income", population: 59.3, treatmentGaps: { depression: 80, anxiety: 85, bipolar: 75, schizophrenia: 70, substanceUse: 90 }, healthcareResources: { psychiatristsPer100k: 0.8 } },
+                    "Russia": { region: "European Region", incomeGroup: "Upper Middle Income", population: 146.2, treatmentGaps: { depression: 70, anxiety: 75, bipolar: 65, schizophrenia: 55, substanceUse: 85 }, healthcareResources: { psychiatristsPer100k: 11.0 } },
+                    "Russian Federation": { region: "European Region", incomeGroup: "Upper Middle Income", population: 146.2, treatmentGaps: { depression: 70, anxiety: 75, bipolar: 65, schizophrenia: 55, substanceUse: 85 }, healthcareResources: { psychiatristsPer100k: 11.0 } }
                 }
             };
         }
