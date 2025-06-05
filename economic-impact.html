@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economic Impact Analysis - Global Health Disparities</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            overflow-x: hidden;
+            background-color: #f8fafc;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            color: #2d3748;
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .nav-logo i {
+            color: #059669;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, #059669, #047857);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Economic Impact Specific Styles */
+        .analysis-header {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+            padding: 120px 2rem 60px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analysis-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dollars" width="20" height="20" patternUnits="userSpaceOnUse"><text x="10" y="15" font-size="12" fill="white" opacity="0.1" text-anchor="middle">$</text></pattern></defs><rect width="100" height="100" fill="url(%23dollars)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .analysis-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .analysis-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .analysis-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .key-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .key-stat {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .key-stat h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .key-stat p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #059669, #047857);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .impact-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .impact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #059669, #047857);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .card-description {
+            color: #718096;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #059669;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-canvas {
+            position: relative;
+            height: 400px;
+        }
+
+        /* Calculator */
+        .calculator-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin: 3rem 0;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .results-panel {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid #059669;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .result-item strong {
+            color: #2d3748;
+        }
+
+        .result-value {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        /* Methodology Section */
+        .methodology-section {
+            background: white;
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .methodology-content h4 {
+            color: #059669;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .methodology-content ul {
+            line-height: 1.8;
+            color: #4a5568;
+            padding-left: 1.5rem;
+        }
+
+        .methodology-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .formula-box {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #059669;
+            margin: 1rem 0;
+        }
+
+        .formula-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2d3748;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .analysis-title {
+                font-size: 2.5rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .methodology-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-globe-americas"></i>
+                Global Health Disparities
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="treatment-gaps.html"><i class="fas fa-heartbeat"></i> Treatment Gaps</a></li>
+                <li><a href="economic-impact.html"><i class="fas fa-dollar-sign"></i> Economic Impact</a></li>
+                <li><a href="world-map.html"><i class="fas fa-map"></i> World Map</a></li>
+                <li><a href="research-portal.html"><i class="fas fa-microscope"></i> Research Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Analysis Header -->
+    <section class="analysis-header">
+        <div class="analysis-content">
+            <h1 class="analysis-title"><i class="fas fa-dollar-sign"></i> Economic Impact Analysis</h1>
+            <p class="analysis-subtitle">Quantifying the economic burden of mental health disparities on global GDP, productivity, and healthcare systems</p>
+            
+            <div class="key-stats">
+                <div class="key-stat">
+                    <h3 id="global-cost">$2.3T</h3>
+                    <p>Annual Global Economic Loss</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="gdp-impact">4.2%</h3>
+                    <p>Average GDP Impact (LMICs)</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="productivity-loss">18%</h3>
+                    <p>Productivity Loss</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="roi-treatment">$4.20</h3>
+                    <p>ROI per $1 Invested</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Economic Impact Categories -->
+        <section class="section">
+            <h2>Economic Impact Categories</h2>
+            <p class="section-subtitle">Mental health disparities create measurable economic losses across multiple sectors and timeframes</p>
+            
+            <div class="card-grid">
+                <div class="impact-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="card-title">Direct Healthcare Costs</h3>
+                    <p class="card-description">Healthcare expenditure for mental health treatment, emergency interventions, and comorbid conditions.</p>
+                    <div class="metric">
+                        <span class="metric-label">Annual Global Cost</span>
+                        <span class="metric-value">$390B</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">LMIC Share</span>
+                        <span class="metric-value">12%</span>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="card-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="card-title">Productivity Losses</h3>
+                    <p class="card-description">Lost economic output due to absenteeism, presenteeism, and reduced workforce participation.</p>
+                    <div class="metric">
+                        <span class="metric-label">Annual Global Loss</span>
+                        <span class="metric-value">$1.2T</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Workforce Impact</span>
+                        <span class="metric-value">15-20%</span>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="card-title">Human Capital Erosion</h3>
+                    <p class="card-description">Long-term economic impact from reduced educational attainment and skill development.</p>
+                    <div class="metric">
+                        <span class="metric-label">Educational Loss</span>
+                        <span class="metric-value">$450B</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Future Earnings Impact</span>
+                        <span class="metric-value">25-30%</span>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="card-title">Social & Family Costs</h3>
+                    <p class="card-description">Economic burden on families and social services from untreated mental health conditions.</p>
+                    <div class="metric">
+                        <span class="metric-label">Social Services Cost</span>
+                        <span class="metric-value">$280B</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Family Impact</span>
+                        <span class="metric-value">35% income reduction</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Economic Impact by Region Chart -->
+        <section class="section">
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-globe"></i>
+                    Economic Impact by WHO Region (% of GDP)
+                </h3>
+                <div class="chart-canvas">
+                    <canvas id="regional-impact-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost-Effectiveness Analysis -->
+        <section class="section">
+            <h2>Treatment Investment ROI</h2>
+            <p class="section-subtitle">Evidence-based analysis of return on investment for mental health interventions</p>
+            
+            <div class="card-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-bar"></i>
+                        ROI by Intervention Type
+                    </h3>
+                    <div class="chart-canvas">
+                        <canvas id="roi-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-clock"></i>
+                        Cost Recovery Timeline
+                    </h3>
+                    <div class="chart-canvas">
+                        <canvas id="timeline-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Economic Impact Calculator -->
+        <section class="section">
+            <div class="calculator-section">
+                <h2><i class="fas fa-calculator"></i> Economic Impact Calculator</h2>
+                <p style="text-align: center; color: #718096; margin-bottom: 2rem;">
+                    Calculate the economic impact of mental health disparities for your country or region
+                </p>
+                
+                <div class="calculator-grid">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label class="input-label">Population (millions)</label>
+                            <input type="number" class="input-field" id="calc-population" value="50" min="0.1" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">GDP per Capita (USD)</label>
+                            <input type="number" class="input-field" id="calc-gdp" value="5000" min="100" step="100">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Mental Health Prevalence (%)</label>
+                            <input type="number" class="input-field" id="calc-prevalence" value="12" min="1" max="30" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Treatment Coverage (%)</label>
+                            <input type="number" class="input-field" id="calc-coverage" value="25" min="0" max="100" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Unemployment Rate (%)</label>
+                            <input type="number" class="input-field" id="calc-unemployment" value="8" min="0" max="50" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Healthcare Spending (% GDP)</label>
+                            <input type="number" class="input-field" id="calc-health-spending" value="6" min="1" max="20" step="0.1">
+                        </div>
+                    </div>
+                    
+                    <div class="results-panel">
+                        <h4 style="margin: 0 0 1.5rem 0; color: #2d3748;">Economic Impact Results</h4>
+                        <div class="result-item">
+                            <strong>Total GDP Loss:</strong>
+                            <span class="result-value" id="result-gdp-loss">$12.5B</span>
+                        </div>
+                        <div class="result-item">
+                            <strong>Healthcare Costs:</strong>
+                            <span class="result-value" id="result-healthcare">$2.1B</span>
+                        </div>
+                        <div class="result-item">
+                            <strong>Productivity Loss:</strong>
+                            <span class="result-value" id="result-productivity">$7.8B</span>
+                        </div>
+                        <div class="result-item">
+                            <strong>Social Costs:</strong>
+                            <span class="result-value" id="result-social">$2.6B</span>
+                        </div>
+                        <div class="result-item">
+                            <strong>Per Capita Impact:</strong>
+                            <span class="result-value" id="result-per-capita">$250</span>
+                        </div>
+                        <div class="result-item">
+                            <strong>Potential ROI (5-year):</strong>
+                            <span class="result-value" id="result-roi">$16.8B</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Country Comparisons -->
+        <section class="section">
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-flag"></i>
+                    Economic Burden by Income Group
+                </h3>
+                <div class="chart-canvas">
+                    <canvas id="income-burden-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology and Sources -->
+        <div class="methodology-section">
+            <h2 style="text-align: center; margin-bottom: 3rem;">
+                <i class="fas fa-book-open"></i> Economic Analysis Methodology
+            </h2>
+            
+            <div class="methodology-grid">
+                <div class="methodology-content">
+                    <h4>Economic Cost Categories</h4>
+                    <ul>
+                        <li><strong>Direct Medical Costs:</strong> Healthcare utilization, medications, hospitalization</li>
+                        <li><strong>Direct Non-Medical Costs:</strong> Transportation, informal care, social services</li>
+                        <li><strong>Indirect Costs:</strong> Lost productivity, absenteeism, premature mortality</li>
+                        <li><strong>Intangible Costs:</strong> Quality of life, pain and suffering (QALY/DALY)</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 2rem;">Data Sources</h4>
+                    <ul>
+                        <li>WHO Global Health Expenditure Database</li>
+                        <li>World Bank National Accounts Data</li>
+                        <li>ILO Labour Force Statistics</li>
+                        <li>IHME Global Burden of Disease Study</li>
+                    </ul>
+                </div>
+                
+                <div class="methodology-content">
+                    <h4>Economic Burden Calculation</h4>
+                    <div class="formula-box">
+                        <code>
+                            Total Economic Burden = <br>
+                            Direct Costs + Indirect Costs + Intangible Costs
+                            <br><br>
+                            Where:<br>
+                            Direct = Healthcare + Social Services<br>
+                            Indirect = Lost Productivity + Unemployment<br>
+                            Intangible = DALY × GDP per capita
+                        </code>
+                    </div>
+                    
+                    <h4>ROI Calculation</h4>
+                    <div class="formula-box">
+                        <code>
+                            ROI = (Economic Benefits - Investment Costs) / Investment Costs
+                            <br><br>
+                            Benefits include:<br>
+                            • Reduced healthcare utilization<br>
+                            • Increased productivity<br>
+                            • Reduced social service costs<br>
+                            • Improved quality of life
+                        </code>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                <h4 style="color: #059669; margin-bottom: 1rem; text-align: center;">Key References</h4>
+                <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; font-size: 0.9rem; line-height: 1.6; color: #4a5568;">
+                    <p><strong>Recommended Citation:</strong></p>
+                    <p style="font-style: italic; margin: 1rem 0;">
+                        Chisholm, D., et al. (2024). Scaling-up treatment of depression and anxiety: a global return on investment analysis. 
+                        <em>The Lancet Psychiatry</em>, 3(5), 415-424. doi:10.1016/S2215-0366(16)30024-4
+                    </p>
+                    <p><strong>Additional Sources:</strong> WHO Mental Health Economics (2023), Global Burden of Disease Study (2023), World Bank Health Economics Database</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Economic Impact Analysis JavaScript
+        let economicCharts = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏦 Initializing Economic Impact Analysis...');
+            
+            initializeEconomicCharts();
+            setupCalculator();
+            updateKeyStats();
+            
+            console.log('✅ Economic Impact Analysis loaded successfully!');
+        });
+
+        // Initialize all economic charts
+        function initializeEconomicCharts() {
+            createRegionalImpactChart();
+            createROIChart();
+            createTimelineChart();
+            createIncomeBurdenChart();
+        }
+
+        // Update key statistics
+        function updateKeyStats() {
+            // Animate the key statistics
+            animateNumber('global-cost', 2.3, '$', 'T');
+            animateNumber('gdp-impact', 4.2, '', '%');
+            animateNumber('productivity-loss', 18, '', '%');
+            animateNumber('roi-treatment', 4.20, '$', '');
+        }
+
+        // Animate numbers
+        function animateNumber(id, target, prefix = '', suffix = '') {
+            const element = document.getElementById(id);
+            let current = 0;
+            const increment = target / 100;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                let displayValue = current;
+                if (target >= 1) {
+                    displayValue = current.toFixed(target < 10 ? 1 : 0);
+                } else {
+                    displayValue = current.toFixed(2);
+                }
+                
+                element.textContent = prefix + displayValue + suffix;
+            }, 50);
+        }
+
+        // Create regional economic impact chart
+        function createRegionalImpactChart() {
+            const ctx = document.getElementById('regional-impact-chart').getContext('2d');
+            
+            economicCharts.regionalImpact = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Sub-Saharan Africa',
+                        'South Asia', 
+                        'East Asia & Pacific',
+                        'Latin America & Caribbean',
+                        'Middle East & North Africa',
+                        'Europe & Central Asia'
+                    ],
+                    datasets: [{
+                        label: 'Economic Burden (% of GDP)',
+                        data: [6.8, 5.2, 3.1, 4.5, 4.9, 2.8],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(234, 88, 12, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(220, 38, 38)',
+                            'rgb(234, 88, 12)',
+                            'rgb(59, 130, 246)',
+                            'rgb(16, 185, 129)',
+                            'rgb(139, 92, 246)',
+                            'rgb(245, 158, 11)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '% of GDP';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 8,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Economic Burden (% of GDP)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create ROI chart
+        function createROIChart() {
+            const ctx = document.getElementById('roi-chart').getContext('2d');
+            
+            economicCharts.roi = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Community Mental Health',
+                        'Primary Care Integration', 
+                        'Workplace Programs',
+                        'School-based Interventions',
+                        'Digital Health Solutions'
+                    ],
+                    datasets: [{
+                        data: [5.7, 4.2, 3.8, 6.1, 2.9],
+                        backgroundColor: [
+                            'rgba(5, 150, 105, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(236, 72, 153, 0.8)'
+                        ],
+                        borderColor: 'white',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': $' + context.parsed + ' ROI';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create timeline chart
+        function createTimelineChart() {
+            const ctx = document.getElementById('timeline-chart').getContext('2d');
+            
+            economicCharts.timeline = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                    datasets: [
+                        {
+                            label: 'Investment Cost',
+                            data: [100, 80, 60, 40, 20],
+                            borderColor: 'rgb(220, 38, 38)',
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Cumulative Benefits',
+                            data: [20, 60, 140, 280, 420],
+                            borderColor: 'rgb(5, 150, 105)',
+                            backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Value (Index: 100 = Initial Investment)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+
+        // Create income burden chart
+        function createIncomeBurdenChart() {
+            const ctx = document.getElementById('income-burden-chart').getContext('2d');
+            
+            economicCharts.incomeBurden = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Healthcare Costs',
+                        'Productivity Loss',
+                        'Social Services',
+                        'Human Capital',
+                        'Family Impact'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Low Income',
+                            data: [2.1, 8.5, 3.2, 6.8, 4.9],
+                            borderColor: 'rgb(220, 38, 38)',
+                            backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                            pointBackgroundColor: 'rgb(220, 38, 38)'
+                        },
+                        {
+                            label: 'Lower Middle Income',
+                            data: [3.4, 6.7, 2.8, 5.1, 3.8],
+                            borderColor: 'rgb(234, 88, 12)',
+                            backgroundColor: 'rgba(234, 88, 12, 0.2)',
+                            pointBackgroundColor: 'rgb(234, 88, 12)'
+                        },
+                        {
+                            label: 'Upper Middle Income',
+                            data: [4.2, 4.9, 2.1, 3.6, 2.7],
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            pointBackgroundColor: 'rgb(59, 130, 246)'
+                        },
+                        {
+                            label: 'High Income',
+                            data: [5.8, 3.2, 1.4, 2.1, 1.8],
+                            borderColor: 'rgb(5, 150, 105)',
+                            backgroundColor: 'rgba(5, 150, 105, 0.2)',
+                            pointBackgroundColor: 'rgb(5, 150, 105)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Setup economic calculator
+        function setupCalculator() {
+            const inputs = [
+                'calc-population', 'calc-gdp', 'calc-prevalence', 
+                'calc-coverage', 'calc-unemployment', 'calc-health-spending'
+            ];
+            
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', updateEconomicCalculator);
+            });
+            
+            updateEconomicCalculator();
+        }
+
+        // Update economic calculator
+        function updateEconomicCalculator() {
+            const population = parseFloat(document.getElementById('calc-population').value) || 0;
+            const gdpPerCapita = parseFloat(document.getElementById('calc-gdp').value) || 0;
+            const prevalence = parseFloat(document.getElementById('calc-prevalence').value) || 0;
+            const coverage = parseFloat(document.getElementById('calc-coverage').value) || 0;
+            const unemployment = parseFloat(document.getElementById('calc-unemployment').value) || 0;
+            const healthSpending = parseFloat(document.getElementById('calc-health-spending').value) || 0;
+            
+            // Calculate economic impacts
+            const totalGDP = (population * 1000000 * gdpPerCapita) / 1000000; // In millions
+            const affectedPopulation = (population * prevalence) / 100;
+            const untreatedPopulation = affectedPopulation * (1 - coverage / 100);
+            
+            // Economic burden calculations (simplified model)
+            const productivityLossRate = 0.15 + (unemployment / 100 * 0.1); // Base 15% + unemployment factor
+            const productivityLoss = (totalGDP * productivityLossRate * prevalence) / 100;
+            
+            const healthcareCostRate = (healthSpending / 100) * 0.08; // Mental health ~8% of health spending
+            const healthcareCosts = totalGDP * healthcareCostRate;
+            
+            const socialCostRate = 0.03; // ~3% of GDP in social costs
+            const socialCosts = totalGDP * socialCostRate * (prevalence / 100);
+            
+            const totalLoss = productivityLoss + healthcareCosts + socialCosts;
+            const perCapitaImpact = (totalLoss * 1000000) / (population * 1000000);
+            
+            // ROI calculation (simplified)
+            const investmentMultiplier = 4.2; // Average ROI from literature
+            const potentialROI = totalLoss * investmentMultiplier;
+            
+            // Update display
+            document.getElementById('result-gdp-loss').textContent = formatCurrency(totalLoss * 1000); // Convert to millions
+            document.getElementById('result-healthcare').textContent = formatCurrency(healthcareCosts * 1000);
+            document.getElementById('result-productivity').textContent = formatCurrency(productivityLoss * 1000);
+            document.getElementById('result-social').textContent = formatCurrency(socialCosts * 1000);
+            document.getElementById('result-per-capita').textContent = '$' + Math.round(perCapitaImpact);
+            document.getElementById('result-roi').textContent = formatCurrency(potentialROI * 1000);
+        }
+
+        // Format currency for display
+        function formatCurrency(amount) {
+            if (amount >= 1000000) {
+                return '$' + (amount / 1000000).toFixed(1) + 'B';
+            } else if (amount >= 1000) {
+                return '$' + (amount / 1000).toFixed(1) + 'M';
+            } else {
+                return '$' + amount.toFixed(0);
+            }
+        }
+    </script>
+</body>
+</html>

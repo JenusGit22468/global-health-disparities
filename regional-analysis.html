@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regional Analysis - Global Health Disparities</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            overflow-x: hidden;
+            background-color: #f8fafc;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            color: #2d3748;
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .nav-logo i {
+            color: #059669;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, #059669, #047857);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Regional Analysis Specific Styles */
+        .analysis-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+            padding: 120px 2rem 60px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analysis-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="globe" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="8" stroke="white" stroke-width="1" fill="none" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23globe)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .analysis-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .analysis-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .analysis-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .key-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .key-stat {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .key-stat h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .key-stat p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Region Cards */
+        .region-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .region-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .region-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .region-card.africa::before {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+        }
+
+        .region-card.asia::before {
+            background: linear-gradient(90deg, #d97706, #b45309);
+        }
+
+        .region-card.europe::before {
+            background: linear-gradient(90deg, #059669, #047857);
+        }
+
+        .region-card.americas::before {
+            background: linear-gradient(90deg, #7c3aed, #6d28d9);
+        }
+
+        .region-card.oceania::before {
+            background: linear-gradient(90deg, #2563eb, #1d4ed8);
+        }
+
+        .region-card.middle-east::before {
+            background: linear-gradient(90deg, #ea580c, #c2410c);
+        }
+
+        .region-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .region-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .region-icon.africa {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+
+        .region-icon.asia {
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+
+        .region-icon.europe {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .region-icon.americas {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
+
+        .region-icon.oceania {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        .region-icon.middle-east {
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+        }
+
+        .region-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .region-countries {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .region-metrics {
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .metric-label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .performance-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .indicator-excellent {
+            color: #059669;
+        }
+
+        .indicator-good {
+            color: #d97706;
+        }
+
+        .indicator-poor {
+            color: #dc2626;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-canvas {
+            position: relative;
+            height: 400px;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        .table-content {
+            padding: 0;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: #f7fafc;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-cell {
+            font-weight: 500;
+        }
+
+        .table-cell.region-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Methodology Section */
+        .methodology-section {
+            background: white;
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .methodology-content h4 {
+            color: #2563eb;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .methodology-content ul {
+            line-height: 1.8;
+            color: #4a5568;
+            padding-left: 1.5rem;
+        }
+
+        .methodology-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .analysis-title {
+                font-size: 2.5rem;
+            }
+            
+            .region-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .methodology-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <i class="fas fa-globe-americas"></i>
+                Global Health Disparities
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="treatment-gaps.html"><i class="fas fa-heartbeat"></i> Treatment Gaps</a></li>
+                <li><a href="economic-impact.html"><i class="fas fa-dollar-sign"></i> Economic Impact</a></li>
+                <li><a href="world-map.html"><i class="fas fa-map"></i> World Map</a></li>
+                <li><a href="research-portal.html"><i class="fas fa-microscope"></i> Research Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Analysis Header -->
+    <section class="analysis-header">
+        <div class="analysis-content">
+            <h1 class="analysis-title"><i class="fas fa-globe"></i> Regional Analysis</h1>
+            <p class="analysis-subtitle">Comparative analysis of mental health disparities across WHO regions and income classifications</p>
+            
+            <div class="key-stats">
+                <div class="key-stat">
+                    <h3 id="regions-analyzed">6</h3>
+                    <p>WHO Regions</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="worst-region">Sub-Saharan Africa</h3>
+                    <p>Highest Treatment Gap</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="best-region">Europe</h3>
+                    <p>Best Performance</p>
+                </div>
+                <div class="key-stat">
+                    <h3 id="inequality-index">3.4x</h3>
+                    <p>Regional Inequality Factor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Regional Overview -->
+        <section class="section">
+            <h2>WHO Regional Analysis</h2>
+            <p class="section-subtitle">Mental health outcomes, resource allocation, and treatment gaps across World Health Organization regions</p>
+            
+            <div class="region-grid">
+                <div class="region-card africa">
+                    <div class="region-header">
+                        <div class="region-icon africa">
+                            <i class="fas fa-globe-africa"></i>
+                        </div>
+                        <div>
+                            <h3 class="region-title">Sub-Saharan Africa</h3>
+                            <p class="region-countries">48 countries</p>
+                        </div>
+                    </div>
+                    <div class="region-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Treatment Gap</span>
+                            <span class="metric-value">89%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Mental Health Workers</span>
+                            <span class="metric-value">0.5 per 100k</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Healthcare Spending</span>
+                            <span class="metric-value">4.1% GDP</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Economic Burden</span>
+                            <span class="metric-value">6.8% GDP</span>
+                        </div>
+                    </div>
+                    <div class="performance-indicator indicator-poor">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Critical - Urgent Intervention Needed
+                    </div>
+                </div>
+
+                <div class="region-card asia">
+                    <div class="region-header">
+                        <div class="region-icon asia">
+                            <i class="fas fa-globe-asia"></i>
+                        </div>
+                        <div>
+                            <h3 class="region-title">South & South-East Asia</h3>
+                            <p class="region-countries">25 countries</p>
+                        </div>
+                    </div>
+                    <div class="region-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Treatment Gap</span>
+                            <span class="metric-value">78%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Mental Health Workers</span>
+                            <span class="metric-value">1.2 per 100k</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Healthcare Spending</span>
+                            <span class="metric-value">3.8% GDP</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Economic Burden</span>
+                            <span class="metric-value">5.2% GDP</span>
+                        </div>
+                    </div>
+                    <div class="performance-indicator indicator-poor">
+                        <i class="fas fa-arrow-down"></i>
+                        Poor - Significant Improvements Needed
+                    </div>
+                </div>
+
+                <div class="region-card americas">
+                    <div class="region-header">
+                        <div class="region-icon americas">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div>
+                            <h3 class="region-title">Latin America & Caribbean</h3>
+                            <p class="region-countries">33 countries</p>
+                        </div>
+                    </div>
+                    <div class="region-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Treatment Gap</span>
+                            <span class="metric-value">68%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Mental Health Workers</span>
+                            <span class="metric-value">2.8 per 100k</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Healthcare Spending</span>
+                            <span class="metric-value">7.2% GDP</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Economic Burden</span>
+                            <span class="metric-value">4.5% GDP</span>
+                        </div>
+                    </div>
+                    <div class="performance-indicator indicator-good">
+                        <i class="fas fa-arrow-right"></i>
+                        Moderate - Progress Being Made
+                    </div>
+                </div>
+
+                <div class="region-card middle-east">
+                    <div class="region-header">
+                        <div class="region-icon middle-east">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div>
+                            <h3 class="region-title">Middle East & North Africa</h3>
+                            <p class="region-countries">22 countries</p>
+                        </div>
+                    </div>
+                    <div class="region-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Treatment Gap</span>
+                            <span class="metric-value">72%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Mental Health Workers</span>
+                            <span class="metric-value">1.8 per 100k</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Healthcare Spending</span>
+                            <span class="metric-value">5.1% GDP</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Economic Burden</span>
+                            <span class="metric-value">4.9% GDP</span>
+                        </div>
+                    </div>
+                    <div class="performance-indicator indicator-good">
+                        <i class="fas fa-arrow-up"></i>
+                        Moderate - Inconsistent Progress
+                    </div>
+                </div>
+
+                <div class="region-card europe">
+                    <div class="region-header">
+                        <div class="region-icon europe">
+                            <i class="fas fa-globe-europe"></i>
+                        </div>
+                        <div>
+                            <h3 class="region-title">Europe & Central Asia</h3>
+                            <p class="region-countries">53 countries</p>
+                        </div>
+                    </div>
+                    <div class="region-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Treatment Gap</span>
+                            <span class="metric-value">42%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Mental Health Workers</span>
+                            <span class="metric-value">12.4 per 100k</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Healthcare Spending</span>
+                            <span class="metric-value">9.8% GDP</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Economic Burden</span>
+                            <span class="metric-value">2.8% GDP</span>
+                        </div>
+                    </div>
+                    <div class="performance-indicator indicator-excellent">
+                        <i class="fas fa-check-circle"></i>
+                        Good - Strong Performance
+                    </div>
+                </div>
+
+                <div class="region-card oceania">
+                    <div class="region-header">
+                        <div class="region-icon oceania">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div>
+                            <h3 class="region-title">East Asia & Pacific</h3>
+                            <p class="region-countries">37 countries</p>
+                        </div>
+                    </div>
+                    <div class="region-metrics">
+                        <div class="metric-row">
+                            <span class="metric-label">Treatment Gap</span>
+                            <span class="metric-value">58%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Mental Health Workers</span>
+                            <span class="metric-value">4.2 per 100k</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Healthcare Spending</span>
+                            <span class="metric-value">6.3% GDP</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Economic Burden</span>
+                            <span class="metric-value">3.1% GDP</span>
+                        </div>
+                    </div>
+                    <div class="performance-indicator indicator-good">
+                        <i class="fas fa-arrow-up"></i>
+                        Moderate - Rapid Improvement
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparative Charts -->
+        <section class="section">
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Treatment Gap by Region
+                </h3>
+                <div class="chart-canvas">
+                    <canvas id="treatment-gap-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-users-cog"></i>
+                    Mental Health Workforce Density
+                </h3>
+                <div class="chart-canvas">
+                    <canvas id="workforce-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Income Group Analysis -->
+        <section class="section">
+            <h2>Analysis by Income Level</h2>
+            <p class="section-subtitle">Mental health disparities across World Bank income classifications</p>
+            
+            <div class="comparison-table">
+                <div class="table-header">
+                    <h3><i class="fas fa-chart-line"></i> Income Group Comparison</h3>
+                </div>
+                <div class="table-content">
+                    <div class="table-row">
+                        <div class="table-cell region-name">Income Group</div>
+                        <div class="table-cell">Treatment Gap</div>
+                        <div class="table-cell">Workforce Density</div>
+                        <div class="table-cell">Health Spending</div>
+                        <div class="table-cell">Economic Burden</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell region-name">Low Income</div>
+                        <div class="table-cell">91%</div>
+                        <div class="table-cell">0.3 per 100k</div>
+                        <div class="table-cell">3.2% GDP</div>
+                        <div class="table-cell">8.1% GDP</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell region-name">Lower Middle Income</div>
+                        <div class="table-cell">79%</div>
+                        <div class="table-cell">1.1 per 100k</div>
+                        <div class="table-cell">4.8% GDP</div>
+                        <div class="table-cell">5.7% GDP</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell region-name">Upper Middle Income</div>
+                        <div class="table-cell">65%</div>
+                        <div class="table-cell">3.4 per 100k</div>
+                        <div class="table-cell">6.9% GDP</div>
+                        <div class="table-cell">3.8% GDP</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell region-name">High Income</div>
+                        <div class="table-cell">38%</div>
+                        <div class="table-cell">15.2 per 100k</div>
+                        <div class="table-cell">11.3% GDP</div>
+                        <div class="table-cell">2.1% GDP</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investment Priorities by Region -->
+        <section class="section">
+            <div class="chart-container">
+                <h3 class="chart-title">
+                    <i class="fas fa-bullseye"></i>
+                    Regional Investment Priorities Matrix
+                </h3>
+                <div class="chart-canvas">
+                    <canvas id="priority-matrix-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology and Sources -->
+        <div class="methodology-section">
+            <h2 style="text-align: center; margin-bottom: 3rem;">
+                <i class="fas fa-book-open"></i> Regional Analysis Methodology
+            </h2>
+            
+            <div class="methodology-grid">
+                <div class="methodology-content">
+                    <h4>Regional Classification</h4>
+                    <ul>
+                        <li><strong>WHO Regions:</strong> Six official WHO regional groupings for global health analysis</li>
+                        <li><strong>World Bank Income Groups:</strong> Four-tier classification by Gross National Income per capita</li>
+                        <li><strong>Geographic Clusters:</strong> Sub-regional analysis for more granular insights</li>
+                        <li><strong>Economic Zones:</strong> Trade and development partnership considerations</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 2rem;">Comparative Metrics</h4>
+                    <ul>
+                        <li>Treatment gap percentages standardized by population</li>
+                        <li>Mental health workforce density per 100,000 population</li>
+                        <li>Healthcare expenditure as percentage of GDP</li>
+                        <li>Economic burden relative to national economic output</li>
+                    </ul>
+                </div>
+                
+                <div class="methodology-content">
+                    <h4>Data Integration</h4>
+                    <ul>
+                        <li><strong>Multi-source validation:</strong> Cross-referencing WHO, World Bank, and IHME data</li>
+                        <li><strong>Population weighting:</strong> Adjusting for demographic differences across regions</li>
+                        <li><strong>Economic standardization:</strong> PPP-adjusted comparisons for fair assessment</li>
+                        <li><strong>Temporal alignment:</strong> Using most recent 3-year averages for stability</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 2rem;">Performance Indicators</h4>
+                    <ul>
+                        <li><strong>Critical:</strong> Treatment gap >85%, urgent intervention required</li>
+                        <li><strong>Poor:</strong> Treatment gap 70-85%, significant improvements needed</li>
+                        <li><strong>Moderate:</strong> Treatment gap 50-70%, progress being made</li>
+                        <li><strong>Good:</strong> Treatment gap <50%, strong performance maintained</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Regional Analysis JavaScript
+        let regionalCharts = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌍 Initializing Regional Analysis...');
+            
+            initializeRegionalCharts();
+            updateKeyStats();
+            
+            console.log('✅ Regional Analysis loaded successfully!');
+        });
+
+        function updateKeyStats() {
+            // Animate key statistics
+            animateNumber('regions-analyzed', 6, '', '');
+            
+            // Update text-based stats
+            setTimeout(() => {
+                document.getElementById('worst-region').textContent = 'Sub-Saharan Africa';
+                document.getElementById('best-region').textContent = 'Europe';
+                document.getElementById('inequality-index').textContent = '3.4x';
+            }, 1000);
+        }
+
+        function animateNumber(id, target, prefix = '', suffix = '') {
+            const element = document.getElementById(id);
+            let current = 0;
+            const increment = target / 50;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                element.textContent = prefix + Math.floor(current) + suffix;
+            }, 50);
+        }
+
+        function initializeRegionalCharts() {
+            createTreatmentGapChart();
+            createWorkforceChart();
+            createPriorityMatrixChart();
+        }
+
+        // Treatment Gap by Region Chart
+        function createTreatmentGapChart() {
+            const ctx = document.getElementById('treatment-gap-chart').getContext('2d');
+            
+            regionalCharts.treatmentGap = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: [
+                        'Sub-Saharan Africa',
+                        'South & South-East Asia',
+                        'Middle East & North Africa',
+                        'Latin America & Caribbean',
+                        'East Asia & Pacific',
+                        'Europe & Central Asia'
+                    ],
+                    datasets: [{
+                        label: 'Treatment Gap (%)',
+                        data: [89, 78, 72, 68, 58, 42],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(217, 119, 6, 0.8)',
+                            'rgba(234, 88, 12, 0.8)',
+                            'rgba(124, 58, 237, 0.8)',
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(5, 150, 105, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(220, 38, 38)',
+                            'rgb(217, 119, 6)',
+                            'rgb(234, 88, 12)',
+                            'rgb(124, 58, 237)',
+                            'rgb(37, 99, 235)',
+                            'rgb(5, 150, 105)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.x + '% treatment gap';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Treatment Gap Percentage'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Mental Health Workforce Chart
+        function createWorkforceChart() {
+            const ctx = document.getElementById('workforce-chart').getContext('2d');
+            
+            regionalCharts.workforce = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Sub-Saharan\nAfrica',
+                        'South &\nSouth-East Asia',
+                        'Middle East &\nNorth Africa',
+                        'Latin America &\nCaribbean',
+                        'East Asia &\nPacific',
+                        'Europe &\nCentral Asia'
+                    ],
+                    datasets: [{
+                        label: 'Mental Health Workers per 100k',
+                        data: [0.5, 1.2, 1.8, 2.8, 4.2, 12.4],
+                        backgroundColor: [
+                            'rgba(220, 38, 38, 0.8)',
+                            'rgba(217, 119, 6, 0.8)',
+                            'rgba(234, 88, 12, 0.8)',
+                            'rgba(124, 58, 237, 0.8)',
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(5, 150, 105, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(220, 38, 38)',
+                            'rgb(217, 119, 6)',
+                            'rgb(234, 88, 12)',
+                            'rgb(124, 58, 237)',
+                            'rgb(37, 99, 235)',
+                            'rgb(5, 150, 105)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' workers per 100k population';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Workers per 100,000 Population'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Priority Matrix Chart (Scatter plot)
+        function createPriorityMatrixChart() {
+            const ctx = document.getElementById('priority-matrix-chart').getContext('2d');
+            
+            const regionData = [
+                { label: 'Sub-Saharan Africa', x: 89, y: 6.8, color: 'rgba(220, 38, 38, 0.8)' },
+                { label: 'South & South-East Asia', x: 78, y: 5.2, color: 'rgba(217, 119, 6, 0.8)' },
+                { label: 'Middle East & North Africa', x: 72, y: 4.9, color: 'rgba(234, 88, 12, 0.8)' },
+                { label: 'Latin America & Caribbean', x: 68, y: 4.5, color: 'rgba(124, 58, 237, 0.8)' },
+                { label: 'East Asia & Pacific', x: 58, y: 3.1, color: 'rgba(37, 99, 235, 0.8)' },
+                { label: 'Europe & Central Asia', x: 42, y: 2.8, color: 'rgba(5, 150, 105, 0.8)' }
+            ];
+            
+            regionalCharts.priorityMatrix = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: regionData.map(region => ({
+                        label: region.label,
+                        data: [{ x: region.x, y: region.y }],
+                        backgroundColor: region.color,
+                        borderColor: region.color.replace('0.8', '1'),
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': Gap ' + context.parsed.x + '%, Burden ' + context.parsed.y + '% GDP';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Treatment Gap (%)'
+                            },
+                            min: 30,
+                            max: 95
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Economic Burden (% of GDP)'
+                            },
+                            min: 2,
+                            max: 8
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
