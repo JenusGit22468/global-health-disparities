@@ -19,7 +19,6 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: #2d3748;
-            overflow-x: hidden;
         }
 
         /* Navigation */
@@ -32,7 +31,6 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 4px 30px rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
 
         .nav-container {
@@ -89,7 +87,6 @@
             background: linear-gradient(135deg, #2d3748, #4a5568);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .header p {
@@ -134,11 +131,6 @@
             filter: brightness(1.1);
         }
 
-        .country.selected {
-            stroke: #2563eb;
-            stroke-width: 3;
-        }
-
         /* Data Colors */
         .gap-very-low { fill: #10b981; }
         .gap-low { fill: #34d399; }
@@ -148,7 +140,7 @@
         .gap-critical { fill: #dc2626; }
         .gap-no-data { fill: #9ca3af; }
 
-        /* Control Panel */
+        /* Controls */
         .controls {
             position: absolute;
             top: 20px;
@@ -157,7 +149,6 @@
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(226, 232, 240, 0.8);
             z-index: 100;
             min-width: 300px;
         }
@@ -166,17 +157,10 @@
             margin-bottom: 1rem;
             color: #2d3748;
             font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .controls h3 i {
-            color: #059669;
         }
 
         .control-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .control-group label {
@@ -184,7 +168,6 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: #4a5568;
-            font-size: 0.9rem;
         }
 
         .control-select {
@@ -194,40 +177,6 @@
             border-radius: 8px;
             background: white;
             font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .control-select:focus {
-            outline: none;
-            border-color: #059669;
-            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
-        }
-
-        .map-controls {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .map-btn {
-            padding: 0.5rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            background: white;
-            color: #4a5568;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-        }
-
-        .map-btn:hover {
-            border-color: #059669;
-            color: #059669;
-            background: #f0fff4;
         }
 
         /* Legend */
@@ -239,15 +188,12 @@
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(226, 232, 240, 0.8);
             z-index: 100;
         }
 
         .legend h4 {
             margin-bottom: 1rem;
             color: #2d3748;
-            font-size: 1rem;
-            font-weight: 600;
         }
 
         .legend-item {
@@ -261,13 +207,11 @@
             width: 20px;
             height: 16px;
             border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.1);
         }
 
         .legend-label {
             font-size: 0.875rem;
             color: #4a5568;
-            font-weight: 500;
         }
 
         /* Info Panel */
@@ -279,108 +223,28 @@
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(226, 232, 240, 0.8);
             z-index: 100;
             min-width: 280px;
-            max-width: 350px;
             display: none;
         }
 
         .info-panel.active {
             display: block;
-            animation: slideInRight 0.3s ease;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .info-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
         }
 
         .info-title {
             font-size: 1.3rem;
             font-weight: 700;
             color: #2d3748;
-            margin-bottom: 0.25rem;
+            margin-bottom: 1rem;
         }
 
-        .info-close {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: #718096;
-            cursor: pointer;
-            padding: 0.25rem;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .info-close:hover {
-            background: #f7fafc;
-            color: #2d3748;
-        }
-
-        .info-subtitle {
-            color: #718096;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .info-metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .metric {
-            text-align: center;
-            padding: 1rem;
-            background: #f7fafc;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 0.25rem;
-        }
-
-        .metric-label {
-            font-size: 0.75rem;
-            color: #718096;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .info-details {
-            margin-top: 1rem;
-        }
-
-        .detail-item {
+        .info-detail {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
             border-bottom: 1px solid #e2e8f0;
-        }
-
-        .detail-item:last-child {
-            border-bottom: none;
         }
 
         .detail-label {
@@ -393,38 +257,7 @@
             color: #2d3748;
         }
 
-        /* Tooltip */
-        .tooltip {
-            position: absolute;
-            background: rgba(30, 41, 59, 0.95);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0;
-            transform: translate(-50%, -100%);
-            transition: opacity 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .tooltip.active {
-            opacity: 1;
-        }
-
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: rgba(30, 41, 59, 0.95);
-        }
-
-        /* Loading State */
+        /* Loading */
         .loading {
             position: absolute;
             top: 50%;
@@ -450,17 +283,30 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive Design */
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(30, 41, 59, 0.95);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .tooltip.active {
+            opacity: 1;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .controls, .legend, .info-panel {
                 position: relative;
                 margin: 1rem;
                 width: calc(100% - 2rem);
-                min-width: auto;
-            }
-
-            .info-panel {
-                margin-top: 0;
             }
 
             .map-container {
@@ -469,14 +315,6 @@
 
             .header h1 {
                 font-size: 2rem;
-            }
-
-            .nav-container {
-                padding: 0 1rem;
-            }
-
-            .nav-logo {
-                font-size: 1.3rem;
             }
         }
     </style>
@@ -499,7 +337,7 @@
     <!-- Header -->
     <header class="header">
         <h1>Interactive Global Health Disparities Map</h1>
-        <p>Explore mental health treatment gaps, economic impact, and healthcare resource distribution across 194 countries worldwide</p>
+        <p>Explore mental health treatment gaps across 194 countries worldwide</p>
     </header>
 
     <!-- Main Content -->
@@ -512,57 +350,33 @@
 
         <!-- Map Container -->
         <div class="map-container" id="map-container">
-            <!-- Map Controls -->
+            <!-- Controls -->
             <div class="controls">
                 <h3><i class="fas fa-sliders-h"></i> Map Controls</h3>
                 
                 <div class="control-group">
-                    <label for="data-layer">Data Layer</label>
-                    <select id="data-layer" class="control-select">
-                        <option value="treatment-gap">Mental Health Treatment Gap</option>
-                        <option value="economic-impact">Economic Impact (% GDP)</option>
-                        <option value="healthcare-workers">Healthcare Workers per 1000</option>
-                        <option value="hospital-beds">Hospital Beds per 1000</option>
-                        <option value="health-expenditure">Health Expenditure (% GDP)</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label for="disorder-type">Mental Health Disorder</label>
-                    <select id="disorder-type" class="control-select">
+                    <label for="disorder-select">Mental Health Disorder</label>
+                    <select id="disorder-select" class="control-select">
                         <option value="overall">Overall Average</option>
                         <option value="depression">Depression</option>
                         <option value="anxiety">Anxiety Disorders</option>
                         <option value="bipolar">Bipolar Disorder</option>
                         <option value="schizophrenia">Schizophrenia</option>
-                        <option value="substance-use">Substance Use Disorders</option>
+                        <option value="substanceUse">Substance Use</option>
                     </select>
                 </div>
 
                 <div class="control-group">
-                    <label for="income-filter">Income Group Filter</label>
-                    <select id="income-filter" class="control-select">
-                        <option value="all">All Income Levels</option>
-                        <option value="high">High Income</option>
-                        <option value="upper-middle">Upper Middle Income</option>
-                        <option value="lower-middle">Lower Middle Income</option>
-                        <option value="low">Low Income</option>
+                    <label for="region-filter">WHO Region Filter</label>
+                    <select id="region-filter" class="control-select">
+                        <option value="all">All Regions</option>
+                        <option value="African Region">African Region</option>
+                        <option value="Americas Region">Americas Region</option>
+                        <option value="South-East Asia Region">South-East Asia</option>
+                        <option value="European Region">European Region</option>
+                        <option value="Eastern Mediterranean Region">Eastern Mediterranean</option>
+                        <option value="Western Pacific Region">Western Pacific</option>
                     </select>
-                </div>
-
-                <div class="map-controls">
-                    <button class="map-btn" id="zoom-in" title="Zoom In">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="map-btn" id="zoom-out" title="Zoom Out">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button class="map-btn" id="reset-zoom" title="Reset View">
-                        <i class="fas fa-home"></i>
-                    </button>
-                    <button class="map-btn" id="fullscreen" title="Fullscreen">
-                        <i class="fas fa-expand"></i>
-                    </button>
                 </div>
             </div>
 
@@ -604,45 +418,9 @@
 
             <!-- Country Info Panel -->
             <div class="info-panel" id="info-panel">
-                <div class="info-header">
-                    <div>
-                        <div class="info-title" id="info-country-name">Select a Country</div>
-                        <div class="info-subtitle" id="info-country-region">Click on any country to view details</div>
-                    </div>
-                    <button class="info-close" id="info-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                <div class="info-metrics">
-                    <div class="metric">
-                        <div class="metric-value" id="info-treatment-gap">--</div>
-                        <div class="metric-label">Treatment Gap</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" id="info-population">--</div>
-                        <div class="metric-label">Population</div>
-                    </div>
-                </div>
-
-                <div class="info-details">
-                    <div class="detail-item">
-                        <span class="detail-label">Income Group</span>
-                        <span class="detail-value" id="info-income">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Region</span>
-                        <span class="detail-value" id="info-region">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Healthcare Workers/1000</span>
-                        <span class="detail-value" id="info-workers">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Health Expenditure (% GDP)</span>
-                        <span class="detail-value" id="info-expenditure">--</span>
-                    </div>
-                </div>
+                <div class="info-title" id="info-country-name">Select a Country</div>
+                <div id="info-details"></div>
+                <button onclick="closeInfo()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer;">Close</button>
             </div>
 
             <!-- Tooltip -->
@@ -650,8 +428,6 @@
         </div>
     </main>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
     <script>
         // Global variables
         let worldData = null;
@@ -660,200 +436,10 @@
         let g = null;
         let path = null;
         let zoom = null;
-        let currentDataLayer = 'treatment-gap';
         let currentDisorder = 'overall';
-        let currentIncomeFilter = 'all';
+        let currentRegion = 'all';
 
-        // Initialize the map
-        async function initializeMap() {
-            try {
-                console.log('=� Initializing world map...');
-                
-                // Load world topology and health data
-                await Promise.all([
-                    loadWorldData(),
-                    loadHealthData()
-                ]);
-
-                // Setup map
-                setupMap();
-                renderMap();
-                setupEventListeners();
-                
-                // Hide loading
-                document.getElementById('loading').style.display = 'none';
-                
-                console.log(' World map initialized successfully!');
-                
-            } catch (error) {
-                console.error('L Error initializing map:', error);
-                showError('Failed to load map data. Please refresh the page.');
-            }
-        }
-
-        // Load world topology data
-        async function loadWorldData() {
-            try {
-                // Use a public world topology dataset
-                const response = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
-                if (!response.ok) throw new Error('Failed to load world data');
-                
-                worldData = await response.json();
-                console.log('=� World topology data loaded');
-                
-            } catch (error) {
-                console.error('Error loading world data:', error);
-                // Fallback to basic world data
-                worldData = createBasicWorldData();
-            }
-        }
-
-        // Load health data
-        async function loadHealthData() {
-            try {
-                const response = await fetch('./datasets/mental-health-treatment-gaps.json?v=' + Date.now());
-                if (!response.ok) throw new Error('Failed to load health data');
-                
-                healthData = await response.json();
-                console.log('=� Health data loaded');
-                
-            } catch (error) {
-                console.error('Error loading health data:', error);
-                // Use sample data
-                healthData = createSampleHealthData();
-            }
-        }
-
-        // Setup SVG map
-        function setupMap() {
-            const container = document.getElementById('map-container');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            svg = d3.select('#world-map')
-                .attr('width', width)
-                .attr('height', height);
-
-            // Create projection
-            const projection = d3.geoNaturalEarth1()
-                .scale(width / 6.5)
-                .translate([width / 2, height / 2]);
-
-            path = d3.geoPath().projection(projection);
-
-            // Setup zoom
-            zoom = d3.zoom()
-                .scaleExtent([0.5, 8])
-                .on('zoom', handleZoom);
-
-            svg.call(zoom);
-
-            // Create main group
-            g = svg.append('g');
-        }
-
-        // Render the map
-        function renderMap() {
-            if (!worldData || !healthData) return;
-
-            const countries = topojson.feature(worldData, worldData.objects.countries);
-
-            // Draw countries
-            const countryPaths = g.selectAll('.country')
-                .data(countries.features)
-                .enter().append('path')
-                .attr('class', 'country')
-                .attr('d', path)
-                .attr('data-name', d => d.properties.NAME || 'Unknown')
-                .on('mouseover', handleCountryHover)
-                .on('mouseout', handleCountryLeave)
-                .on('click', handleCountryClick);
-
-            // Apply initial coloring
-            updateMapColors();
-        }
-
-        // Update map colors based on current data layer
-        function updateMapColors() {
-            d3.selectAll('.country')
-                .attr('class', d => {
-                    const countryName = d.properties.NAME || 'Unknown';
-                    const colorClass = getCountryColorClass(countryName);
-                    return `country ${colorClass}`;
-                });
-        }
-
-        // Get color class for country based on data
-        function getCountryColorClass(countryName) {
-            const countryData = getCountryData(countryName);
-            if (!countryData) return 'gap-no-data';
-
-            let value;
-            switch (currentDataLayer) {
-                case 'treatment-gap':
-                    value = countryData.treatmentGaps?.[currentDisorder] || countryData.treatmentGaps?.overall || 0;
-                    break;
-                case 'economic-impact':
-                    value = countryData.economicImpact?.gdpPercentage || 0;
-                    break;
-                case 'healthcare-workers':
-                    value = countryData.healthcareResources?.workersPerThousand || 0;
-                    break;
-                case 'hospital-beds':
-                    value = countryData.healthcareResources?.bedsPerThousand || 0;
-                    break;
-                case 'health-expenditure':
-                    value = countryData.healthExpenditure?.percentGDP || 0;
-                    break;
-                default:
-                    value = 0;
-            }
-
-            // Return color class based on value ranges
-            if (currentDataLayer === 'treatment-gap') {
-                if (value >= 95) return 'gap-critical';
-                if (value >= 80) return 'gap-very-high';
-                if (value >= 60) return 'gap-high';
-                if (value >= 40) return 'gap-medium';
-                if (value >= 20) return 'gap-low';
-                return 'gap-very-low';
-            } else {
-                // For other metrics, use inverted scale (higher is better)
-                if (value >= 8) return 'gap-very-low';
-                if (value >= 6) return 'gap-low';
-                if (value >= 4) return 'gap-medium';
-                if (value >= 2) return 'gap-high';
-                if (value > 0) return 'gap-very-high';
-                return 'gap-no-data';
-            }
-        }
-
-        // Get country data from health dataset
-        function getCountryData(countryName) {
-            if (!healthData || !healthData.treatmentGapsByCountry) return null;
-            
-            // Try exact match first
-            let data = healthData.treatmentGapsByCountry[countryName];
-            if (data) return enhanceCountryData(data);
-
-            // Try mapped name
-            const mappedName = countryNameMap[countryName];
-            if (mappedName && healthData.treatmentGapsByCountry[mappedName]) {
-                return enhanceCountryData(healthData.treatmentGapsByCountry[mappedName]);
-            }
-
-            // Try fuzzy matching
-            const countries = Object.keys(healthData.treatmentGapsByCountry);
-            const match = countries.find(country => 
-                country.toLowerCase().includes(countryName.toLowerCase()) ||
-                countryName.toLowerCase().includes(country.toLowerCase()) ||
-                normalizeCountryName(country) === normalizeCountryName(countryName)
-            );
-
-            return match ? enhanceCountryData(healthData.treatmentGapsByCountry[match]) : null;
-        }
-
-        // Country name mapping for topology vs dataset mismatches
+        // Country name mapping
         const countryNameMap = {
             'United States of America': 'United States',
             'United Kingdom': 'United Kingdom',
@@ -869,56 +455,166 @@
             'Venezuela (Bolivarian Republic of)': 'Venezuela',
             'Bolivia (Plurinational State of)': 'Bolivia',
             'Tanzania (United Republic of)': 'Tanzania',
-            'Moldova (Republic of)': 'Moldova',
-            'Macedonia (the former Yugoslav Republic of)': 'North Macedonia',
-            'Côte d\'Ivoire': 'Ivory Coast',
-            'Myanmar': 'Myanmar',
-            'Timor-Leste': 'East Timor',
-            'Swaziland': 'Eswatini'
+            'Moldova (Republic of)': 'Moldova'
         };
 
-        // Normalize country names for better matching
-        function normalizeCountryName(name) {
-            // First try direct mapping
-            if (countryNameMap[name]) {
-                return countryNameMap[name];
+        // Initialize the map
+        async function initializeMap() {
+            try {
+                console.log('🗺️ Initializing world map...');
+                
+                await Promise.all([
+                    loadWorldData(),
+                    loadHealthData()
+                ]);
+
+                setupMap();
+                renderMap();
+                setupEventListeners();
+                
+                document.getElementById('loading').style.display = 'none';
+                console.log('✅ World map initialized successfully!');
+                
+            } catch (error) {
+                console.error('❌ Error initializing map:', error);
+                showError('Failed to load map data. Please check your internet connection.');
             }
-            
-            return name.toLowerCase()
-                .replace(/\s+/g, '')
-                .replace(/[^\w]/g, '')
-                .replace('unitedstates', 'usa')
-                .replace('unitedkingdom', 'uk')
-                .replace('russianfederation', 'russia')
-                .replace('democraticrepublicofcongo', 'drcongo')
-                .replace('republicofcongo', 'congo');
         }
 
-        // Enhance country data with calculated fields
-        function enhanceCountryData(data) {
-            if (!data) return null;
+        // Load world topology data
+        async function loadWorldData() {
+            try {
+                const response = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json');
+                if (!response.ok) throw new Error('Failed to load world data');
+                
+                worldData = await response.json();
+                console.log('🗺️ World topology data loaded');
+                
+            } catch (error) {
+                console.error('Error loading world data:', error);
+                throw error;
+            }
+        }
+
+        // Load health data
+        async function loadHealthData() {
+            try {
+                const response = await fetch('./datasets/mental-health-treatment-gaps.json');
+                if (!response.ok) throw new Error('Failed to load health data');
+                
+                healthData = await response.json();
+                console.log('📊 Health data loaded');
+                
+            } catch (error) {
+                console.error('Error loading health data:', error);
+                // Use fallback data
+                healthData = createFallbackData();
+            }
+        }
+
+        // Setup SVG map
+        function setupMap() {
+            const container = document.getElementById('map-container');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            svg = d3.select('#world-map')
+                .attr('width', width)
+                .attr('height', height);
+
+            const projection = d3.geoNaturalEarth1()
+                .scale(width / 6.5)
+                .translate([width / 2, height / 2]);
+
+            path = d3.geoPath().projection(projection);
+
+            zoom = d3.zoom()
+                .scaleExtent([0.5, 8])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+            g = svg.append('g');
+        }
+
+        // Render the map
+        function renderMap() {
+            if (!worldData || !healthData) return;
+
+            const countries = topojson.feature(worldData, worldData.objects.countries);
+
+            g.selectAll('.country')
+                .data(countries.features)
+                .enter().append('path')
+                .attr('class', 'country')
+                .attr('d', path)
+                .attr('data-name', d => d.properties.NAME || 'Unknown')
+                .on('mouseover', handleCountryHover)
+                .on('mouseout', handleCountryLeave)
+                .on('click', handleCountryClick);
+
+            updateMapColors();
+        }
+
+        // Update map colors
+        function updateMapColors() {
+            g.selectAll('.country')
+                .attr('class', d => {
+                    const countryName = d.properties.NAME || 'Unknown';
+                    const colorClass = getCountryColorClass(countryName);
+                    return `country ${colorClass}`;
+                })
+                .style('opacity', d => {
+                    if (currentRegion === 'all') return 1;
+                    const countryData = getCountryData(d.properties.NAME);
+                    return (countryData && countryData.region === currentRegion) ? 1 : 0.3;
+                });
+        }
+
+        // Get country data
+        function getCountryData(countryName) {
+            if (!healthData || !healthData.treatmentGapsByCountry) return null;
             
-            // Calculate overall treatment gap average
-            const gaps = data.treatmentGaps;
-            const overallGap = gaps ? 
-                Math.round((gaps.depression + gaps.anxiety + gaps.bipolar + gaps.schizophrenia + gaps.substanceUse) / 5) : 0;
-            
-            // Add missing fields
-            return {
-                ...data,
-                treatmentGaps: {
-                    ...gaps,
-                    overall: overallGap
-                },
-                economicImpact: data.economicImpact || { gdpPercentage: 3.5 }, // Default estimate
-                healthcareResources: {
-                    workersPerThousand: (data.healthcareResources?.psychiatristsPer100k || 0) * 10 + 
-                                       (data.healthcareResources?.psychologistsPer100k || 0) * 10,
-                    bedsPerThousand: (data.healthcareResources?.mentalHealthBedsPer100k || 0) * 10
-                },
-                healthExpenditure: data.healthExpenditure || { percentGDP: 6.0 }, // Default estimate
-                population: data.population * 1000000 // Convert from millions to actual number
-            };
+            // Try exact match
+            let data = healthData.treatmentGapsByCountry[countryName];
+            if (data) return data;
+
+            // Try mapped name
+            const mappedName = countryNameMap[countryName];
+            if (mappedName && healthData.treatmentGapsByCountry[mappedName]) {
+                return healthData.treatmentGapsByCountry[mappedName];
+            }
+
+            // Try fuzzy matching
+            const countries = Object.keys(healthData.treatmentGapsByCountry);
+            const match = countries.find(country => 
+                country.toLowerCase().includes(countryName.toLowerCase()) ||
+                countryName.toLowerCase().includes(country.toLowerCase())
+            );
+
+            return match ? healthData.treatmentGapsByCountry[match] : null;
+        }
+
+        // Get color class for country
+        function getCountryColorClass(countryName) {
+            const countryData = getCountryData(countryName);
+            if (!countryData || !countryData.treatmentGaps) return 'gap-no-data';
+
+            let value;
+            if (currentDisorder === 'overall') {
+                const gaps = countryData.treatmentGaps;
+                value = Math.round((gaps.depression + gaps.anxiety + gaps.bipolar + gaps.schizophrenia + gaps.substanceUse) / 5);
+            } else {
+                value = countryData.treatmentGaps[currentDisorder] || 0;
+            }
+
+            if (value >= 95) return 'gap-critical';
+            if (value >= 80) return 'gap-very-high';
+            if (value >= 60) return 'gap-high';
+            if (value >= 40) return 'gap-medium';
+            if (value >= 20) return 'gap-low';
+            return 'gap-very-low';
         }
 
         // Handle country hover
@@ -926,36 +622,31 @@
             const countryName = d.properties.NAME || 'Unknown';
             const countryData = getCountryData(countryName);
             
-            // Show tooltip
             const tooltip = document.getElementById('tooltip');
             let tooltipText = countryName;
             
             if (countryData) {
-                const value = getCurrentValue(countryData);
-                const unit = getValueUnit();
-                tooltipText += `\n${value}${unit}`;
+                let value;
+                if (currentDisorder === 'overall') {
+                    const gaps = countryData.treatmentGaps;
+                    value = Math.round((gaps.depression + gaps.anxiety + gaps.bipolar + gaps.schizophrenia + gaps.substanceUse) / 5);
+                } else {
+                    value = countryData.treatmentGaps[currentDisorder] || 0;
+                }
+                tooltipText += `\nTreatment Gap: ${value}%`;
             } else {
                 tooltipText += '\nNo data available';
             }
 
             tooltip.textContent = tooltipText;
-            tooltip.style.left = event.pageX + 'px';
-            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY - 10 + 'px';
             tooltip.classList.add('active');
-
-            // Highlight country
-            d3.select(event.target)
-                .classed('selected', true);
         }
 
         // Handle country leave
-        function handleCountryLeave(event, d) {
-            // Hide tooltip
+        function handleCountryLeave() {
             document.getElementById('tooltip').classList.remove('active');
-
-            // Remove highlight
-            d3.select(event.target)
-                .classed('selected', false);
         }
 
         // Handle country click
@@ -966,180 +657,96 @@
             showCountryInfo(countryName, countryData);
         }
 
-        // Show country information panel
+        // Show country information
         function showCountryInfo(countryName, countryData) {
             const panel = document.getElementById('info-panel');
+            const title = document.getElementById('info-country-name');
+            const details = document.getElementById('info-details');
             
-            // Update country name and region
-            document.getElementById('info-country-name').textContent = countryName;
+            title.textContent = countryName;
             
             if (countryData) {
-                document.getElementById('info-country-region').textContent = countryData.region || 'Unknown Region';
-                document.getElementById('info-treatment-gap').textContent = `${countryData.treatmentGaps?.overall || 0}%`;
-                document.getElementById('info-population').textContent = formatNumber(countryData.population || 0);
-                document.getElementById('info-income').textContent = countryData.incomeGroup || 'Unknown';
-                document.getElementById('info-region').textContent = countryData.region || 'Unknown';
-                document.getElementById('info-workers').textContent = countryData.healthcareResources?.workersPerThousand || '0';
-                document.getElementById('info-expenditure').textContent = `${countryData.healthExpenditure?.percentGDP || 0}%`;
+                const gaps = countryData.treatmentGaps;
+                const overall = Math.round((gaps.depression + gaps.anxiety + gaps.bipolar + gaps.schizophrenia + gaps.substanceUse) / 5);
+                
+                details.innerHTML = `
+                    <div class="info-detail">
+                        <span class="detail-label">Region:</span>
+                        <span class="detail-value">${countryData.region || 'Unknown'}</span>
+                    </div>
+                    <div class="info-detail">
+                        <span class="detail-label">Income Group:</span>
+                        <span class="detail-value">${countryData.incomeGroup || 'Unknown'}</span>
+                    </div>
+                    <div class="info-detail">
+                        <span class="detail-label">Population (M):</span>
+                        <span class="detail-value">${countryData.population || 'Unknown'}</span>
+                    </div>
+                    <div class="info-detail">
+                        <span class="detail-label">Overall Gap:</span>
+                        <span class="detail-value">${overall}%</span>
+                    </div>
+                    <div class="info-detail">
+                        <span class="detail-label">Depression Gap:</span>
+                        <span class="detail-value">${gaps.depression}%</span>
+                    </div>
+                    <div class="info-detail">
+                        <span class="detail-label">Anxiety Gap:</span>
+                        <span class="detail-value">${gaps.anxiety}%</span>
+                    </div>
+                    <div class="info-detail">
+                        <span class="detail-label">Psychiatrists/100k:</span>
+                        <span class="detail-value">${countryData.healthcareResources?.psychiatristsPer100k || 0}</span>
+                    </div>
+                `;
             } else {
-                document.getElementById('info-country-region').textContent = 'No data available';
-                document.getElementById('info-treatment-gap').textContent = '--';
-                document.getElementById('info-population').textContent = '--';
-                document.getElementById('info-income').textContent = '--';
-                document.getElementById('info-region').textContent = '--';
-                document.getElementById('info-workers').textContent = '--';
-                document.getElementById('info-expenditure').textContent = '--';
+                details.innerHTML = '<p>No data available for this country.</p>';
             }
 
             panel.classList.add('active');
         }
 
+        // Close info panel
+        function closeInfo() {
+            document.getElementById('info-panel').classList.remove('active');
+        }
+
         // Setup event listeners
         function setupEventListeners() {
-            // Data layer change
-            document.getElementById('data-layer').addEventListener('change', (e) => {
-                currentDataLayer = e.target.value;
-                updateMapColors();
-                updateLegend();
-            });
-
-            // Disorder type change
-            document.getElementById('disorder-type').addEventListener('change', (e) => {
+            document.getElementById('disorder-select').addEventListener('change', (e) => {
                 currentDisorder = e.target.value;
                 updateMapColors();
             });
 
-            // Income filter change
-            document.getElementById('income-filter').addEventListener('change', (e) => {
-                currentIncomeFilter = e.target.value;
-                filterCountriesByIncome();
+            document.getElementById('region-filter').addEventListener('change', (e) => {
+                currentRegion = e.target.value;
+                updateMapColors();
             });
-
-            // Map controls
-            document.getElementById('zoom-in').addEventListener('click', () => {
-                svg.transition().call(zoom.scaleBy, 1.5);
-            });
-
-            document.getElementById('zoom-out').addEventListener('click', () => {
-                svg.transition().call(zoom.scaleBy, 1 / 1.5);
-            });
-
-            document.getElementById('reset-zoom').addEventListener('click', () => {
-                svg.transition().call(zoom.transform, d3.zoomIdentity);
-            });
-
-            document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
-
-            // Info panel close
-            document.getElementById('info-close').addEventListener('click', () => {
-                document.getElementById('info-panel').classList.remove('active');
-            });
-
-            // Window resize
-            window.addEventListener('resize', handleResize);
         }
 
-        // Handle zoom
-        function handleZoom(event) {
-            g.attr('transform', event.transform);
-        }
-
-        // Handle window resize
-        function handleResize() {
-            const container = document.getElementById('map-container');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            svg.attr('width', width).attr('height', height);
-            
-            // Update projection
-            const projection = d3.geoNaturalEarth1()
-                .scale(width / 6.5)
-                .translate([width / 2, height / 2]);
-
-            path.projection(projection);
-            
-            // Redraw countries
-            g.selectAll('.country').attr('d', path);
-        }
-
-        // Utility functions
-        function getCurrentValue(countryData) {
-            switch (currentDataLayer) {
-                case 'treatment-gap':
-                    return countryData.treatmentGaps?.[currentDisorder] || countryData.treatmentGaps?.overall || 0;
-                case 'economic-impact':
-                    return countryData.economicImpact?.gdpPercentage || 0;
-                case 'healthcare-workers':
-                    return countryData.healthcareResources?.workersPerThousand || 0;
-                case 'hospital-beds':
-                    return countryData.healthcareResources?.bedsPerThousand || 0;
-                case 'health-expenditure':
-                    return countryData.healthExpenditure?.percentGDP || 0;
-                default:
-                    return 0;
-            }
-        }
-
-        function getValueUnit() {
-            switch (currentDataLayer) {
-                case 'treatment-gap':
-                case 'economic-impact':
-                case 'health-expenditure':
-                    return '%';
-                case 'healthcare-workers':
-                case 'hospital-beds':
-                    return '/1000';
-                default:
-                    return '';
-            }
-        }
-
-        function formatNumber(num) {
-            if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
-            if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
-            if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-            return num.toString();
-        }
-
-        function updateLegend() {
-            // Update legend based on current data layer
-            const legend = document.querySelector('.legend h4');
-            const labels = {
-                'treatment-gap': 'Treatment Gap Severity',
-                'economic-impact': 'Economic Impact (% GDP)',
-                'healthcare-workers': 'Healthcare Workers per 1000',
-                'hospital-beds': 'Hospital Beds per 1000',
-                'health-expenditure': 'Health Expenditure (% GDP)'
+        // Create fallback data
+        function createFallbackData() {
+            return {
+                treatmentGapsByCountry: {
+                    "United States": {
+                        region: "Americas Region",
+                        incomeGroup: "High Income",
+                        population: 331.9,
+                        treatmentGaps: { depression: 45, anxiety: 47, bipolar: 40, schizophrenia: 35, substanceUse: 60 },
+                        healthcareResources: { psychiatristsPer100k: 15.2 }
+                    },
+                    "Germany": {
+                        region: "European Region",
+                        incomeGroup: "High Income",
+                        population: 83.2,
+                        treatmentGaps: { depression: 30, anxiety: 32, bipolar: 25, schizophrenia: 20, substanceUse: 45 },
+                        healthcareResources: { psychiatristsPer100k: 18.5 }
+                    }
+                }
             };
-            legend.textContent = labels[currentDataLayer] || 'Data Layer';
         }
 
-        function filterCountriesByIncome() {
-            d3.selectAll('.country')
-                .style('opacity', d => {
-                    if (currentIncomeFilter === 'all') return 1;
-                    
-                    const countryName = d.properties.NAME || 'Unknown';
-                    const countryData = getCountryData(countryName);
-                    
-                    if (!countryData) return 0.3;
-                    
-                    const incomeGroup = countryData.incomeGroup?.toLowerCase() || '';
-                    const filterGroup = currentIncomeFilter.toLowerCase();
-                    
-                    return incomeGroup.includes(filterGroup) ? 1 : 0.3;
-                });
-        }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.getElementById('map-container').requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
+        // Show error
         function showError(message) {
             const loading = document.getElementById('loading');
             loading.innerHTML = `
@@ -1148,45 +755,6 @@
                     <p>${message}</p>
                 </div>
             `;
-        }
-
-        // Fallback data functions
-        function createBasicWorldData() {
-            // Basic world topology structure
-            return {
-                type: "Topology",
-                objects: {
-                    countries: {
-                        type: "GeometryCollection",
-                        geometries: []
-                    }
-                }
-            };
-        }
-
-        function createSampleHealthData() {
-            return {
-                treatmentGapsByCountry: {
-                    "United States": {
-                        region: "North America",
-                        incomeGroup: "High Income",
-                        population: 331000000,
-                        treatmentGaps: { overall: 45, depression: 43, anxiety: 47 },
-                        economicImpact: { gdpPercentage: 4.2 },
-                        healthcareResources: { workersPerThousand: 12.3, bedsPerThousand: 2.9 },
-                        healthExpenditure: { percentGDP: 17.8 }
-                    },
-                    "Germany": {
-                        region: "Europe",
-                        incomeGroup: "High Income",
-                        population: 83000000,
-                        treatmentGaps: { overall: 32, depression: 30, anxiety: 34 },
-                        economicImpact: { gdpPercentage: 3.1 },
-                        healthcareResources: { workersPerThousand: 15.2, bedsPerThousand: 8.0 },
-                        healthExpenditure: { percentGDP: 11.7 }
-                    }
-                }
-            };
         }
 
         // Initialize when DOM is loaded
