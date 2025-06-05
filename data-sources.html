@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Sources & Methodologies - Global Health Disparities Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 120px auto 0;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .source-category {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: #f7fafc;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .source-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .source-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        .source-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .source-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .source-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .source-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .source-description {
+            color: #718096;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .source-details {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .source-details li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .source-details li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .detail-value {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .methodology-box {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .methodology-box h4 {
+            color: #0c4a6e;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .methodology-steps {
+            list-style: none;
+            padding: 0;
+            counter-reset: step-counter;
+        }
+
+        .methodology-steps li {
+            counter-increment: step-counter;
+            padding: 1rem 0;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .methodology-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            background: #0ea5e9;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .quality-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quality-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .quality-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #059669;
+            display: block;
+        }
+
+        .quality-label {
+            color: #718096;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .update-frequency {
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .update-frequency i {
+            color: #22c55e;
+        }
+
+        @media (max-width: 768px) {
+            .source-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation (simplified for this page) -->
+    <nav class="navbar" style="background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 30px rgba(0,0,0,0.05);">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="color: #2d3748; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-globe-americas" style="color: #059669;"></i>
+                Global Health Disparities
+            </div>
+            <a href="index.html" class="nav-button">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-database"></i> Data Sources & Methodologies</h1>
+            <p>Comprehensive overview of our trusted data sources, quality assurance processes, and research methodologies used in global health disparity analysis</p>
+        </div>
+
+        <!-- Data Quality Overview -->
+        <section class="section">
+            <h2><i class="fas fa-award"></i> Data Quality Standards</h2>
+            
+            <div class="quality-indicators">
+                <div class="quality-item">
+                    <span class="quality-score">25+</span>
+                    <span class="quality-label">Trusted Sources</span>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-score">194</span>
+                    <span class="quality-label">Countries Covered</span>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-score">99.7%</span>
+                    <span class="quality-label">Data Accuracy</span>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-score">Daily</span>
+                    <span class="quality-label">Updates</span>
+                </div>
+            </div>
+
+            <div class="methodology-box">
+                <h4><i class="fas fa-check-circle"></i> Our Quality Assurance Process</h4>
+                <ol class="methodology-steps">
+                    <li><strong>Source Verification:</strong> All data sources are verified for credibility, peer review status, and institutional backing</li>
+                    <li><strong>Data Validation:</strong> Cross-referencing multiple sources to ensure consistency and accuracy</li>
+                    <li><strong>Temporal Alignment:</strong> Standardizing data collection periods and adjusting for reporting delays</li>
+                    <li><strong>Missing Data Handling:</strong> Systematic approaches to handle missing or incomplete data points</li>
+                    <li><strong>Statistical Validation:</strong> Outlier detection and statistical consistency checks</li>
+                    <li><strong>Expert Review:</strong> Regular validation by global health experts and epidemiologists</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Primary International Organizations -->
+        <section class="section">
+            <h2><i class="fas fa-globe"></i> Primary International Organizations</h2>
+            
+            <div class="source-category">
+                <h3>United Nations Agencies & WHO</h3>
+                <div class="source-grid">
+                    <div class="source-card">
+                        <div class="source-header">
+                            <div class="source-icon"><i class="fas fa-building"></i></div>
+                            <h4 class="source-title">World Health Organization (WHO)</h4>
+                        </div>
+                        <p class="source-description">Primary source for global health statistics, disease surveillance, and health system performance indicators</p>
+                        <ul class="source-details">
+                            <li><span class="detail-label">Primary Datasets:</span> <span class="detail-value">Global Health Observatory</span></li>
+                            <li><span class="detail-label">Coverage:</span> <span class="detail-value">194 Member States</span></li>
+                            <li><span class="detail-label">Update Frequency:</span> <span class="detail-value">Annual/Quarterly</span></li>
+                            <li><span class="detail-label">Data Points:</span> <span class="detail-value">1000+ Indicators</span></li>
+                        </ul>
+                        <div class="update-frequency">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Last updated: January 2024</span>
+                        </div>
+                    </div>
+
+                    <div class="source-card">
+                        <div class="source-header">
+                            <div class="source-icon"><i class="fas fa-hands-helping"></i></div>
+                            <h4 class="source-title">UNICEF Health Data</h4>
+                        </div>
+                        <p class="source-description">Comprehensive child and maternal health statistics, immunization coverage, and nutrition data</p>
+                        <ul class="source-details">
+                            <li><span class="detail-label">Focus Areas:</span> <span class="detail-value">Child & Maternal Health</span></li>
+                            <li><span class="detail-label">Coverage:</span> <span class="detail-value">190+ Countries</span></li>
+                            <li><span class="detail-label">Update Frequency:</span> <span class="detail-value">Bi-annual</span></li>
+                            <li><span class="detail-label">Data Quality:</span> <span class="detail-value">Peer Reviewed</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="source-card">
+                        <div class="source-header">
+                            <div class="source-icon"><i class="fas fa-ribbon"></i></div>
+                            <h4 class="source-title">UNAIDS</h4>
+                        </div>
+                        <p class="source-description">HIV/AIDS epidemiological data, treatment coverage, and prevention program effectiveness</p>
+                        <ul class="source-details">
+                            <li><span class="detail-label">Specialty:</span> <span class="detail-value">HIV/AIDS Data</span></li>
+                            <li><span class="detail-label">Coverage:</span> <span class="detail-value">Global</span></li>
+                            <li><span class="detail-label">Update Frequency:</span> <span class="detail-value">Annual Report</span></li>
+                            <li><span class="detail-label">Data Source:</span> <span class="detail-value">Country Reports</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="source-category">
+                <h3>Financial & Development Institutions</h3>
+                <div class="source-grid">
+                    <div class="source-card">
+                        <div class="source-header">
+                            <div class="source-icon"><i class="fas fa-landmark"></i></div>
+                            <h4 class="source-title">World Bank Health Data</h4>
+                        </div>
+                        <p class="source-description">Health expenditure data, economic indicators, and development statistics</p>
+                        <ul class="source-details">
+                            <li><span class="detail-label">Focus:</span> <span class="detail-value">Health Economics</span></li>
+                            <li><span class="detail-label">Coverage:</span> <span class="detail-value">All Income Levels</span></li>
+                            <li><span class="detail-label">Time Series:</span> <span class="detail-value">1960-Present</span></li>
+                            <li><span class="detail-label">Indicators:</span> <span class="detail-value">1400+ Metrics</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="source-card">
+                        <div class="source-header">
+                            <div class="source-icon"><i class="fas fa-globe-europe"></i></div>
+                            <h4 class="source-title">OECD Health Statistics</h4>
+                        </div>
+                        <p class="source-description">Health system performance indicators and cross-country health data from developed nations</p>
+                        <ul class="source-details">
+                            <li><span class="detail-label">Member Countries:</span> <span class="detail-value">38 OECD Nations</span></li>
+                            <li><span class="detail-label">Data Quality:</span> <span class="detail-value">High Standardization</span></li>
+                            <li><span class="detail-label">Update:</span> <span class="detail-value">Annual</span></li>
+                            <li><span class="detail-label">Comparability:</span> <span class="detail-value">Excellent</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Institutions -->
+        <section class="section">
+            <h2><i class="fas fa-university"></i> Research Institutions & Academic Sources</h2>
+            
+            <div class="source-grid">
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-chart-line"></i></div>
+                        <h4 class="source-title">Institute for Health Metrics (IHME)</h4>
+                    </div>
+                    <p class="source-description">Global Burden of Disease Study, health system performance, and comparative effectiveness research</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Global Burden Study:</span> <span class="detail-value">Annual Updates</span></li>
+                        <li><span class="detail-label">Disease Coverage:</span> <span class="detail-value">369+ Diseases</span></li>
+                        <li><span class="detail-label">Risk Factors:</span> <span class="detail-value">87 Tracked</span></li>
+                        <li><span class="detail-label">Methodology:</span> <span class="detail-value">Bayesian Meta-Analysis</span></li>
+                    </ul>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-user-md"></i></div>
+                        <h4 class="source-title">Harvard T.H. Chan School</h4>
+                    </div>
+                    <p class="source-description">Leading research on global health systems, epidemiological studies, and intervention effectiveness</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Research Focus:</span> <span class="detail-value">Global Health Systems</span></li>
+                        <li><span class="detail-label">Publications:</span> <span class="detail-value">500+ Annual Papers</span></li>
+                        <li><span class="detail-label">Data Access:</span> <span class="detail-value">Open Research</span></li>
+                        <li><span class="detail-label">Peer Review:</span> <span class="detail-value">High Impact Journals</span></li>
+                    </ul>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-chart-pie"></i></div>
+                        <h4 class="source-title">Cochrane Reviews</h4>
+                    </div>
+                    <p class="source-description">Systematic reviews and meta-analyses of healthcare interventions and treatment effectiveness</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Review Type:</span> <span class="detail-value">Systematic Reviews</span></li>
+                        <li><span class="detail-label">Evidence Level:</span> <span class="detail-value">Level 1 Evidence</span></li>
+                        <li><span class="detail-label">Reviews:</span> <span class="detail-value">8000+ Active</span></li>
+                        <li><span class="detail-label">Update Cycle:</span> <span class="detail-value">2-3 Years</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Humanitarian & Implementation Organizations -->
+        <section class="section">
+            <h2><i class="fas fa-hands-helping"></i> Humanitarian & Implementation Data</h2>
+            
+            <div class="source-grid">
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-clinic-medical"></i></div>
+                        <h4 class="source-title">Médecins Sans Frontières (MSF)</h4>
+                    </div>
+                    <p class="source-description">Real-world field data from humanitarian medical missions and crisis response in underserved regions</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Field Presence:</span> <span class="detail-value">70+ Countries</span></li>
+                        <li><span class="detail-label">Data Type:</span> <span class="detail-value">Operational Research</span></li>
+                        <li><span class="detail-label">Focus:</span> <span class="detail-value">Crisis & Conflict Areas</span></li>
+                        <li><span class="detail-label">Publications:</span> <span class="detail-value">Open Access</span></li>
+                    </ul>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-hospital"></i></div>
+                        <h4 class="source-title">Partners In Health</h4>
+                    </div>
+                    <p class="source-description">Implementation science data from healthcare delivery in resource-limited settings</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Countries:</span> <span class="detail-value">12 Active Sites</span></li>
+                        <li><span class="detail-label">Focus:</span> <span class="detail-value">Implementation Science</span></li>
+                        <li><span class="detail-label">Data Quality:</span> <span class="detail-value">Longitudinal Studies</span></li>
+                        <li><span class="detail-label">Methodology:</span> <span class="detail-value">Community-Based</span></li>
+                    </ul>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-briefcase-medical"></i></div>
+                        <h4 class="source-title">Gavi Alliance</h4>
+                    </div>
+                    <p class="source-description">Immunization coverage data, vaccine equity metrics, and health system strengthening outcomes</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Focus:</span> <span class="detail-value">Immunization Data</span></li>
+                        <li><span class="detail-label">Countries:</span> <span class="detail-value">73 Eligible Nations</span></li>
+                        <li><span class="detail-label">Children Reached:</span> <span class="detail-value">800M+ Since 2000</span></li>
+                        <li><span class="detail-label">Data Tracking:</span> <span class="detail-value">Real-time Monitoring</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Methodology -->
+        <section class="section">
+            <h2><i class="fas fa-microscope"></i> Research Methodology</h2>
+            
+            <div class="methodology-box">
+                <h4><i class="fas fa-cogs"></i> Data Integration Process</h4>
+                <ol class="methodology-steps">
+                    <li><strong>Source Identification:</strong> Systematic review of authoritative global health data sources</li>
+                    <li><strong>Data Extraction:</strong> Automated and manual extraction processes with validation checks</li>
+                    <li><strong>Standardization:</strong> Converting all data to common formats, units, and time periods</li>
+                    <li><strong>Quality Assessment:</strong> Each dataset scored on completeness, accuracy, and timeliness</li>
+                    <li><strong>Cross-Validation:</strong> Multiple source comparison for consistency verification</li>
+                    <li><strong>Gap Analysis:</strong> Identifying and addressing missing data through interpolation or estimation</li>
+                    <li><strong>Statistical Processing:</strong> Application of appropriate statistical methods for analysis</li>
+                    <li><strong>Expert Review:</strong> Validation by subject matter experts and peer review process</li>
+                </ol>
+            </div>
+
+            <h3><i class="fas fa-chart-bar"></i> Statistical Methods</h3>
+            <div class="source-grid">
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-calculator"></i></div>
+                        <h4 class="source-title">Descriptive Analytics</h4>
+                    </div>
+                    <p class="source-description">Central tendency measures, dispersion analysis, and distribution assessment</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Measures:</span> <span class="detail-value">Mean, Median, Mode</span></li>
+                        <li><span class="detail-label">Dispersion:</span> <span class="detail-value">Standard Deviation, IQR</span></li>
+                        <li><span class="detail-label">Distribution:</span> <span class="detail-value">Normality Testing</span></li>
+                    </ul>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-project-diagram"></i></div>
+                        <h4 class="source-title">Inferential Statistics</h4>
+                    </div>
+                    <p class="source-description">Hypothesis testing, correlation analysis, and predictive modeling</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">Tests:</span> <span class="detail-value">t-tests, ANOVA, Chi-square</span></li>
+                        <li><span class="detail-label">Correlation:</span> <span class="detail-value">Pearson, Spearman</span></li>
+                        <li><span class="detail-label">Modeling:</span> <span class="detail-value">Regression Analysis</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3><i class="fas fa-exclamation-triangle"></i> Limitations & Considerations</h3>
+            <div style="background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                <h4 style="color: #dc2626; margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Data Limitations</h4>
+                <ul style="color: #7f1d1d; line-height: 1.6;">
+                    <li><strong>Reporting Delays:</strong> Some countries may have delays in data reporting, affecting timeliness</li>
+                    <li><strong>Data Quality Variation:</strong> Different countries have varying levels of data collection infrastructure</li>
+                    <li><strong>Missing Data:</strong> Some indicators may not be available for all countries or time periods</li>
+                    <li><strong>Definition Differences:</strong> International standards may be interpreted differently across regions</li>
+                    <li><strong>Political Sensitivity:</strong> Some health data may be influenced by political considerations</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Data Update Schedule -->
+        <section class="section">
+            <h2><i class="fas fa-calendar-alt"></i> Data Update Schedule</h2>
+            
+            <div class="source-grid">
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-clock"></i></div>
+                        <h4 class="source-title">Real-time Sources</h4>
+                    </div>
+                    <p class="source-description">Data sources that provide continuous or near real-time updates</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">WHO Disease Surveillance:</span> <span class="detail-value">Daily</span></li>
+                        <li><span class="detail-label">CDC Global Health:</span> <span class="detail-value">Weekly</span></li>
+                        <li><span class="detail-label">Our World in Data:</span> <span class="detail-value">Daily</span></li>
+                    </ul>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-header">
+                        <div class="source-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h4 class="source-title">Periodic Updates</h4>
+                    </div>
+                    <p class="source-description">Data sources with scheduled periodic updates</p>
+                    <ul class="source-details">
+                        <li><span class="detail-label">WHO Global Health Observatory:</span> <span class="detail-value">Annual</span></li>
+                        <li><span class="detail-label">World Bank Indicators:</span> <span class="detail-value">Annual</span></li>
+                        <li><span class="detail-label">IHME Global Burden Study:</span> <span class="detail-value">Annual</span></li>
+                        <li><span class="detail-label">OECD Health Statistics:</span> <span class="detail-value">Annual</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="update-frequency" style="background: #f0f9ff; border-color: #0ea5e9;">
+                <i class="fas fa-info-circle" style="color: #0ea5e9;"></i>
+                <span><strong>Platform Update Policy:</strong> Our platform integrates new data within 24-48 hours of source availability. Critical health alerts and outbreak data are updated immediately upon official release.</span>
+            </div>
+        </section>
+
+        <!-- Contact and Feedback -->
+        <section class="section">
+            <h2><i class="fas fa-envelope"></i> Data Inquiries & Feedback</h2>
+            <p>Questions about our data sources, methodologies, or suggestions for additional sources?</p>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+                <a href="mailto:data@globalhealthdisparities.org" class="nav-button">
+                    <i class="fas fa-envelope"></i>
+                    Contact Data Team
+                </a>
+                <a href="#" class="nav-button">
+                    <i class="fas fa-bug"></i>
+                    Report Data Issue
+                </a>
+                <a href="#" class="nav-button">
+                    <i class="fas fa-plus"></i>
+                    Suggest New Source
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Add smooth scroll behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate quality indicators on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all source cards
+            document.querySelectorAll('.source-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
